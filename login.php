@@ -63,6 +63,9 @@ if (isset($_GET['action'])) {
                             case 'blacklisted-server-dc':
                                 $html .= "<div id='login-error'>" . i8ln('We found you are a member of the following discord server we have blacklisted: ') . $_GET['bl-discord'] . "</div>";
                                 break;
+                            case 'no-access-role':
+                                $html .= "<div id='login-error'>" . i8ln('You are currently not authorised for map access in our Discord server. Therefore access has been denied.') . " <a href='" . $discordUrl . "'>" . i8ln('Back to Discord.') . "</a></div>";
+                                break;
                         }
                     }
                     $html .= '<div class="imgcontainer">
@@ -228,6 +231,9 @@ if (isset($_GET['callback'])) {
                 }
 
                 $accessRole = checkAccessLevel($user->id, $guilds);
+                if ($accessRole == 999999) {
+                    $accessRole = '';
+                }
 
                 $format = '.png';
                 if (strpos($user->avatar, 'a_') === 0) {
@@ -263,6 +269,12 @@ if (isset($_GET['callback'])) {
                         'discord_guilds' => json_encode($guilds)
                     ]);
                 }
+
+                if ($accessRole == '') {
+                    header("Location: ./login?action=login&error=no-access-role");
+                    die();                    
+                }
+
                 setcookie("LoginCookie", $response->access_token, time() + $response->expires_in);
                 setcookie("LoginEngine", 'discord', time() + $response->expires_in);
             }
