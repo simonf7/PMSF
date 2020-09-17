@@ -71,6 +71,10 @@ if (isset($_GET['action'])) {
                                 break;
                             case 'no-id':
                                 $html .= "<div id='login-error'>" . i8ln('Something went wrong as we couldn\'t find your session id.') . "</div>";
+                                break;
+                            case 'access-change':
+                                $html .= "<div id='login-error'>" . i8ln('Your level of access changed while logged in please login again to get the new level of access.') . "</div>";
+                                break;
                         }
                     }
                     $html .= '<div class="imgcontainer">
@@ -97,6 +101,10 @@ if (isset($_GET['action'])) {
                     if ($noNativeLogin === false) {
                         $html .= "<button type='button' style='background-color: #4CAF50; margin: 2px' onclick=\"location.href='./register?action=account';\" value='Register'><i class='fas fa-user'></i>&nbsp" . i8ln('Register') . "</button>";
                         $html .= "<button type='button' style='background-color: #4CAF50; margin: 2px' onclick=\"location.href='./register?action=password-reset';\" value='Forgot password?'><i class='fas fa-lock'></i>&nbsp" . i8ln('Forgot Password') . "</button>";
+                    }
+                    if ($noNativeLogin && $noDiscordLogin && $noFacebookLogin) {
+                        header("Location: ./");
+			die();
                     }
                     $html .= '</div>
                 </form>
@@ -501,3 +509,5 @@ function parse_signed_request($signed_request) {
 function base64_url_decode($input) {
     return base64_decode(strtr($input, '-_', '+/'));
 }
+header("Location: ./");
+die();
