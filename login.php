@@ -220,6 +220,7 @@ if (isset($_GET['callback'])) {
                 $guilds = request($guilds_request, $access_token);
 
                 if (in_array($user->id, $userBlacklist)) {
+                    logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has been blacklisted\n");
                     header("Location: ./login?action=login&error=blacklisted-member");
                     die();
                 } else {
@@ -250,6 +251,7 @@ if (isset($_GET['callback'])) {
 
                 $accessRole = checkAccessLevel($user->id, $guilds);
                 if ($accessRole == 999999) {
+                    logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has been blocked\n");
                     $accessRole = '';
                 }
 
@@ -292,7 +294,11 @@ if (isset($_GET['callback'])) {
                     ]);
                 }
 
+                if (!intval($accessRole)) {
+                    logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has access role = '" . $accessRole . "'\n");
+                }
                 if ($accessRole == '') {
+                    logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has not matched an access role\n");
                     header("Location: ./login?action=login&error=no-access-role");
                     die();                    
                 }
