@@ -696,7 +696,7 @@ class RocketMap_MAD extends RocketMap
 
     public function query_stops($conds, $params)
     {
-        global $db;
+        global $db, $noQuests, $noTeamRocket;
 
         $query = "SELECT Unix_timestamp(Convert_tz(lure_expiration, '+00:00', @@global.time_zone)) AS lure_expiration,
         Unix_timestamp(Convert_tz(incident_expiration, '+00:00', @@global.time_zone)) AS incident_expiration,
@@ -755,29 +755,59 @@ class RocketMap_MAD extends RocketMap
             $pokestop["latitude"] = floatval($pokestop["latitude"]);
             $pokestop["longitude"] = floatval($pokestop["longitude"]);
             $pokestop["lure_expiration"] = !empty($pokestop["lure_expiration"]) ? $pokestop["lure_expiration"] * 1000 : null;
-            $pokestop["incident_expiration"] = !empty($pokestop["incident_expiration"]) ? $pokestop["incident_expiration"] * 1000 : null;
-            $pokestop["grunt_type_name"] = empty($grunttype_pid) ? null : i8ln($this->grunttype[$grunttype_pid]["type"]);
-            $pokestop["grunt_type_gender"] = empty($grunttype_pid) ? null : i8ln($this->grunttype[$grunttype_pid]["grunt"]);
-            $pokestop["encounters"] = empty($this->grunttype[$grunttype_pid]["encounters"]) ? null : $this->grunttype[$grunttype_pid]["encounters"];
+            if ($noTeamRocket) {
+                $pokestop["incident_expiration"] = null;
+                $pokestop["grunt_type_name"] = null;
+                $pokestop["grunt_type_gender"] = null;
+                $pokestop["grunt_type"] = null;
+                $pokestop["encounters"] = null;
+            } else {
+                $pokestop["incident_expiration"] = !empty($pokestop["incident_expiration"]) ? $pokestop["incident_expiration"] * 1000 : null;
+                $pokestop["grunt_type_name"] = empty($grunttype_pid) ? null : i8ln($this->grunttype[$grunttype_pid]["type"]);
+                $pokestop["grunt_type_gender"] = empty($grunttype_pid) ? null : i8ln($this->grunttype[$grunttype_pid]["grunt"]);
+                $pokestop["encounters"] = empty($this->grunttype[$grunttype_pid]["encounters"]) ? null : $this->grunttype[$grunttype_pid]["encounters"];
+            }
             $pokestop["second_reward"] = empty($this->grunttype[$grunttype_pid]["second_reward"]) ? null : $this->grunttype[$grunttype_pid]["second_reward"];
             $pokestop["lure_id"] = $pokestop["lure_id"] - 500;
             $pokestop["url"] = ! empty($pokestop["url"]) ? preg_replace("/^http:/i", "https:", $pokestop["url"]) : null;
-            $pokestop["quest_type"] = intval($pokestop["quest_type"]);
-            $pokestop["quest_condition_type"] = 0;
-            $pokestop["quest_condition_type_1"] = 0;
-            $pokestop["quest_reward_type"] = intval($pokestop["quest_reward_type"]);
-            $pokestop["quest_target"] = 0;
-            $pokestop["quest_pokemon_id"] = intval($pokestop["quest_pokemon_id"]);
-            $pokestop["quest_pokemon_formid"] = intval($pokestop["quest_pokemon_formid"]);
-            $pokestop["quest_item_id"] = intval($pokestop["quest_item_id"]);
-            $pokestop["quest_reward_amount"] = intval($pokestop["quest_reward_amount"]);
-            $pokestop["quest_dust_amount"] = intval($pokestop["quest_dust_amount"]);
-            $pokestop["quest_energy_amount"] = intval($pokestop["quest_energy_amount"]);
-            $pokestop["quest_energy_pokemon_id"] = intval($pokestop["quest_energy_pokemon_id"]);
-            $pokestop["quest_energy_pokemon_name"] = empty($energy_mon_pid) ? null : i8ln($this->data[$energy_mon_pid]["name"]);
-            $pokestop["quest_item_name"] = empty($item_pid) ? null : i8ln($this->items[$item_pid]["name"]);
-            $pokestop["quest_pokemon_name"] = empty($mon_pid) ? null : i8ln($this->data[$mon_pid]["name"]);
-            $pokestop["quest_condition_info"] = null;
+            if ($noQuests) {
+                $pokestop["quest_type"] = 0;
+                $pokestop["quest_condition_type"] = 0;
+                $pokestop["quest_condition_type_1"] = 0;
+                $pokestop["quest_reward_type"] = 0;
+                $pokestop["quest_target"] = 0;
+                $pokestop["quest_pokemon_id"] = 0;
+                $pokestop["quest_pokemon_formid"] = 0;
+                $pokestop["quest_item_id"] = 0;
+                $pokestop["quest_reward_amount"] = 0;
+                $pokestop["quest_dust_amount"] = 0;
+                $pokestop["quest_energy_amount"] = 0;
+                $pokestop["quest_energy_pokemon_id"] = 0;
+                $pokestop["quest_energy_pokemon_name"] = null;
+                $pokestop["quest_item_name"] = null;
+                $pokestop["quest_pokemon_name"] = null;
+                $pokestop["quest_condition_info"] = null;
+                $pokestop["quest_task"] = null;
+                $pokestop["quest_reward"] = null;
+                $pokestop["quest_timstampl"] = null;
+            } else {
+                $pokestop["quest_type"] = intval($pokestop["quest_type"]);
+                $pokestop["quest_condition_type"] = 0;
+                $pokestop["quest_condition_type_1"] = 0;
+                $pokestop["quest_reward_type"] = intval($pokestop["quest_reward_type"]);
+                $pokestop["quest_target"] = 0;
+                $pokestop["quest_pokemon_id"] = intval($pokestop["quest_pokemon_id"]);
+                $pokestop["quest_pokemon_formid"] = intval($pokestop["quest_pokemon_formid"]);
+                $pokestop["quest_item_id"] = intval($pokestop["quest_item_id"]);
+                $pokestop["quest_reward_amount"] = intval($pokestop["quest_reward_amount"]);
+                $pokestop["quest_dust_amount"] = intval($pokestop["quest_dust_amount"]);
+                $pokestop["quest_energy_amount"] = intval($pokestop["quest_energy_amount"]);
+                $pokestop["quest_energy_pokemon_id"] = intval($pokestop["quest_energy_pokemon_id"]);
+                $pokestop["quest_energy_pokemon_name"] = empty($energy_mon_pid) ? null : i8ln($this->data[$energy_mon_pid]["name"]);
+                $pokestop["quest_item_name"] = empty($item_pid) ? null : i8ln($this->items[$item_pid]["name"]);
+                $pokestop["quest_pokemon_name"] = empty($mon_pid) ? null : i8ln($this->data[$mon_pid]["name"]);
+                $pokestop["quest_condition_info"] = null;
+            }
             $pokestop["last_seen"] = $pokestop["last_seen"] * 1000;
             $data[] = $pokestop;
             unset($pokestops[$i]);
@@ -789,7 +819,7 @@ class RocketMap_MAD extends RocketMap
     public function generated_exclude_list($type)
     {
         global $db, $userTimezone;
-        $curdate = new \DateTime(null, new \DateTimeZone($userTimezone) );
+        $curdate = new \DateTime(null, new \DateTimeZone($userTimezone));
         if ($type === 'pokemonlist') {
             $pokestops = $db->query("SELECT distinct quest_pokemon_id FROM trs_quest WHERE quest_pokemon_id > 0 AND DATE(FROM_UNIXTIME(quest_timestamp)) = '" . $curdate->format('Y-m-d') . "' AND quest_reward_type = 7 order by quest_pokemon_id;")->fetchAll(\PDO::FETCH_ASSOC);
             $data = array();
@@ -797,7 +827,8 @@ class RocketMap_MAD extends RocketMap
                 $data[] = $pokestop['quest_pokemon_id'];
             }
         } elseif ($type === 'energylist') {
-            $pokestops = $db->query("
+            $pokestops = $db->query(
+                "
                 SELECT distinct
                     quest_pokemon_id AS quest_energy_pokemon_id
                 FROM trs_quest
@@ -840,7 +871,6 @@ class RocketMap_MAD extends RocketMap
         $params[':neLat'] = $neLat;
         $params[':neLng'] = $neLng;
         if ($oSwLat != 0) {
-
             $conds[] = "NOT (ST_X(currentPos_raw) > :oswLat AND ST_Y(currentPos_raw) > :oswLng AND ST_X(currentPos_raw) < :oneLat AND ST_Y(currentPos_raw) < :oneLng)";
             $params[':oswLat'] = $oSwLat;
             $params[':oswLng'] = $oSwLng;
@@ -849,13 +879,11 @@ class RocketMap_MAD extends RocketMap
         }
         global $noBoundaries, $boundaries;
         if (!$noBoundaries) {
-
             $conds[] = "(ST_WITHIN(currentPos_raw),ST_GEOMFROMTEXT('POLYGON(( " . $boundaries . " ))'))";
         }
         global $hideDeviceAfterMinutes;
         if ($hideDeviceAfterMinutes > 0) {
             $conds[] = "lastProtoDateTime > UNIX_TIMESTAMP( NOW() - INTERVAL " . $hideDeviceAfterMinutes . " MINUTE)";
-
         }
         return $this->query_scanlocation($conds, $params);
     }
