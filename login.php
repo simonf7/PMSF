@@ -65,6 +65,7 @@ if (isset($_GET['action'])) {
                                 break;
                             case 'duplicate-login':
                                 $html .= "<div id='login-error'>" . i8ln('We logged you out because a different device just logged in with the same account.') . "</div>";
+                                break;
                             case 'no-access-role':
                                 $html .= "<div id='login-error'>" . i8ln('You are currently not authorised for map access in our Discord server. Therefore access has been denied.') . " <a href='" . $discordUrl . "'>" . i8ln('Back to Discord.') . "</a></div>";
                                 break;
@@ -276,7 +277,6 @@ if (isset($_GET['callback'])) {
                 }
 
                 $accessRole = checkAccessLevelDiscord($user->id, $guilds);
-                $accessRole = checkAccessLevel($user->id, $guilds);
                 if ($accessRole == 999999) {
                     logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has been blocked\n");
                     $accessRole = '';
