@@ -1206,13 +1206,7 @@ function initSidebar() {
     $('#pokemon-icon-size').val(Store.get('iconSizeModifier'))
     $('#pokemon-icon-notify-size').val(Store.get('iconNotifySizeModifier'))
 
-    var port = ''
-    if (window.location.port.length > 0) {
-        port = ':' + window.location.port
-    }
-    var path = window.location.protocol + '//' + window.location.hostname + port + window.location.pathname
-    var r = new RegExp('^(?:[a-z]+:)?//', 'i')
-    iconpath = r.test(Store.get('icons')) ? Store.get('icons') : path + Store.get('icons')
+    iconpath = Store.get('icons')
 }
 
 function getTypeSpan(type) {
@@ -1520,7 +1514,7 @@ function gymLabel(item) {
         var formStr = (raidForm <= 0 || raidForm == null || raidForm === '0') ? '00' : raidForm
         var pokemonid = item['raid_pokemon_id']
         var pokemonidStr = (pokemonid <= 9) ? '00' + pokemonid : ((pokemonid <= 99) ? '0' + pokemonid : pokemonid)
-        var costumeStr = (item['raid_pokemon_costume'] > 0) ? '_' + item['pokemon_costume'] : ''
+        var costumeStr = (item['raid_pokemon_costume'] > 0) ? '_' + item['raid_pokemon_costume'] : ''
         var evolutionStr = (evolution > 0) ? '_' + evolution : ''
         if (raidStarted) {
             raidIcon = '<img style="width: 70px;" src="' + iconpath + 'pokemon_icon_' + pokemonidStr + '_' + formStr + costumeStr + evolutionStr + '.png"/>'
@@ -2452,6 +2446,11 @@ function updateGymMarker(item, marker) {
 function updateGymIcons() {
     $.each(mapData.gyms, function (key, value) {
         mapData.gyms[key]['marker'].setIcon(getGymMarkerIcon(mapData.gyms[key]))
+    })
+}
+function updatePokestopIcons() {
+    $.each(mapData.pokestops, function (key, value) {
+        mapData.pokestops[key]['marker'].setIcon(getPokestopMarkerIcon(mapData.pokestops[key]))
     })
 }
 function getPokestopMarkerIcon(item) {
@@ -3492,10 +3491,13 @@ function searchForItem(lat, lon, term, type, field) {
                             html += '<span style="background:url(' + iconpath + 'pokemon_icon_' + pokemonIdStr + '_' + formStr + '.png) no-repeat;" class="i-icon" ></span>'
                         }
                         if (element.quest_item_id !== 0) {
-                            html += '<span style="background:url(' + iconpath + 'rewards/reward_' + element.quest_item_id + '_1.png) no-repeat;" class="i-icon" ></span>'
+                            html += '<span style="background:url(' + iconpath + 'rewards/reward_' + element.quest_item_id + '_' + element.quest_reward_amount + '.png) no-repeat;" class="i-icon" ></span>'
                         }
                         if (element.quest_reward_type === 12) {
                             html += '<span style="background:url(' + iconpath + 'rewards/reward_mega_energy_' + element.quest_energy_pokemon_id + '.png) no-repeat;" class="i-icon" ></span>'
+                        }
+                        if (element.quest_reward_type === 3) {
+                            html += '<span style="background:url(' + iconpath + 'rewards/reward_stardust_' + element.quest_dust_amount + '.png) no-repeat;" class="i-icon" ></span>'
                         }
                     }
                     html += '<div class="cont">'
@@ -6647,19 +6649,10 @@ $(function () {
     })
     $selectIconStyle.on('change', function (e) {
         Store.set('icons', this.value)
-        var port = ''
-        if (window.location.port.length > 0) {
-            port = ':' + window.location.port
-        }
-        var path = window.location.protocol + '//' + window.location.hostname + port + window.location.pathname
-        var r = new RegExp('^(?:[a-z]+:)?//', 'i')
-        iconpath = r.test(Store.get('icons')) ? Store.get('icons') : path + Store.get('icons')
-
+        iconpath = Store.get('icons')
         redrawPokemon(mapData.pokemons)
-        jQuery('label[for="pokestops-switch"]').click()
-        jQuery('label[for="pokestops-switch"]').click()
-        jQuery('label[for="raids-switch"]').click()
-        jQuery('label[for="raids-switch"]').click()
+        updateGymIcons()
+        updatePokestopIcons()
     })
     $selectIconStyle.val(Store.get('icons')).trigger('change')
     pokemonSpritesFilter()
@@ -7716,7 +7709,7 @@ function updateUser() {
         return false
     }
     loadUser(engine).done(function (result) {
-        if (result === 'reload') {
+        if (result.action === 'reload') {
             window.location.href = './logout?action=' + engine + '-logout&reason=change'
         }
     })
@@ -7737,7 +7730,6 @@ function loadUser(engine) {
             toastr.options = toastrOptions
         },
         complete: function complete() {
-            updateMap()
         }
     })
 }
