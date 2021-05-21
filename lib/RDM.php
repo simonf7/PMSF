@@ -54,8 +54,8 @@ class RDM extends Scanner
             $params[':oneLat'] = $oNeLat;
             $params[':oneLng'] = $oNeLng;
         }
-        global $noBoundaries, $boundaries;
-        if (!$noBoundaries) {
+        global $noBoundaries, $boundaries, $showPokemonsOutsideBoundaries;
+        if (!$noBoundaries && !$showPokemonsOutsideBoundaries) {
             $conds[] = "(ST_WITHIN(point(lat,lon),ST_GEOMFROMTEXT('POLYGON(( " . $boundaries . " ))')))";
         }
         if ($tstamp > 0) {
@@ -147,8 +147,8 @@ class RDM extends Scanner
         $params[':neLng'] = $neLng;
         $params[':time'] = time();
 
-        global $noBoundaries, $boundaries;
-        if (!$noBoundaries) {
+        global $noBoundaries, $boundaries, $showPokemonsOutsideBoundaries;
+        if (!$noBoundaries && !$showPokemonsOutsideBoundaries) {
             $conds[] = "(ST_WITHIN(point(lat,lon),ST_GEOMFROMTEXT('POLYGON(( " . $boundaries . " ))')))";
         }
         if (count($ids)) {
@@ -278,8 +278,8 @@ class RDM extends Scanner
         $params[':swLng'] = $swLng;
         $params[':neLat'] = $neLat;
         $params[':neLng'] = $neLng;
-        global $noBoundaries, $boundaries, $hideDeleted;
-        if (!$noBoundaries) {
+        global $noBoundaries, $boundaries, $hideDeleted, $showStopsOutsideBoundaries;
+        if (!$noBoundaries && !$showStopsOutsideBoundaries) {
             $conds[] = "(ST_WITHIN(point(lat,lon),ST_GEOMFROMTEXT('POLYGON(( " . $boundaries . " ))')))";
         }
         if ($hideDeleted) {
@@ -330,7 +330,7 @@ class RDM extends Scanner
             }
             $dustSQL = '';
             if (!empty($dustamount) && !is_nan((float)$dustamount) && $dustamount > 0) {
-                $dustSQL .= "OR (quest_reward_type = 3 AND json_extract(json_extract(`quest_rewards`,'$[*].info.amount'),'$[0]') > :amount) AND lat > :swLat AND lon > :swLng AND lat < :neLat AND lon < :neLng";
+                $dustSQL .= "OR (quest_reward_type = 3 AND json_extract(json_extract(`quest_rewards`,'$[*].info.amount'),'$[0]') >= :amount) AND lat > :swLat AND lon > :swLng AND lat < :neLat AND lon < :neLng";
                 $params[':amount'] = intval($dustamount);
                 $params[':swLat'] = $swLat;
                 $params[':swLng'] = $swLng;
@@ -531,7 +531,7 @@ class RDM extends Scanner
             $pokestop["url"] = ! empty($pokestop["url"]) ? preg_replace("/^http:/i", "https:", $pokestop["url"]) : null;
             $pokestop["lure_expiration"] = $pokestop["lure_expiration"] * 1000;
             $pokestop["incident_expiration"] = $pokestop["incident_expiration"] * 1000;
-            $pokestop["lure_id"] = $pokestop["lure_id"] - 500;
+            $pokestop["lure_id"] = intval($pokestop["lure_id"]);
             $pokestop["quest_item_name"] = empty($item_pid) ? null : i8ln($this->items[$item_pid]["name"]);
             $pokestop["quest_pokemon_name"] = empty($mon_pid) ? null : i8ln($this->data[$mon_pid]["name"]);
             $pokestop["grunt_type_name"] = empty($grunttype_pid) ? null : i8ln($this->grunttype[$grunttype_pid]["type"]);
@@ -565,8 +565,8 @@ class RDM extends Scanner
             $params[':oneLat'] = $oNeLat;
             $params[':oneLng'] = $oNeLng;
         }
-        global $noBoundaries, $boundaries, $hideDeleted;
-        if (!$noBoundaries) {
+        global $noBoundaries, $boundaries, $hideDeleted, $showGymsOutsideBoundaries;
+        if (!$noBoundaries && !$showGymsOutsideBoundaries) {
             $conds[] = "(ST_WITHIN(point(lat,lon),ST_GEOMFROMTEXT('POLYGON(( " . $boundaries . " ))')))";
         }
         if ((!empty($raids) && $raids === 'true') && (!empty($gyms) && $gyms === 'false')) {
@@ -616,7 +616,7 @@ class RDM extends Scanner
 
     public function query_gyms($conds, $params, $raids, $gyms, $rbeids, $reeids)
     {
-        global $db, $noTeams, $noExEligible;
+        global $db, $noTeams, $noExEligible, $noInBattle;
 
         $query = "SELECT id AS gym_id,
         lat AS latitude,
@@ -638,7 +638,8 @@ class RDM extends Scanner
         raid_pokemon_cp,
         raid_pokemon_gender,
         raid_pokemon_evolution,
-        ex_raid_eligible AS park
+        ex_raid_eligible AS park,
+        in_battle
         FROM gym
         WHERE :conditions";
 
@@ -663,6 +664,7 @@ class RDM extends Scanner
             $gym["latitude"] = floatval($gym["latitude"]);
             $gym["longitude"] = floatval($gym["longitude"]);
             $gym["slots_available"] = $noTeams ? 0 : intval($gym["slots_available"]);
+            $gym["in_battle"] = $noInBattle ? 0 : intval($gym["in_battle"]);
             $gym["last_modified"] = $gym["last_modified"] * 1000;
             $gym["last_scanned"] = $gym["last_scanned"] * 1000;
             $gym["raid_start"] = $gym["raid_start"] * 1000;
@@ -736,8 +738,8 @@ class RDM extends Scanner
             $params[':oneLat'] = $oNeLat;
             $params[':oneLng'] = $oNeLng;
         }
-        global $noBoundaries, $boundaries;
-        if (!$noBoundaries) {
+        global $noBoundaries, $boundaries, $showSpawnsOutsideBoundaries;
+        if (!$noBoundaries && !$showSpawnsOutsideBoundaries) {
             $conds[] = "(ST_WITHIN(point(lat,lon),ST_GEOMFROMTEXT('POLYGON(( " . $boundaries . " ))')))";
         }
         if ($tstamp > 0) {

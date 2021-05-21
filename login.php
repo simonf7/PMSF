@@ -63,6 +63,9 @@ if (isset($_GET['action'])) {
                             case 'blacklisted-server-dc':
                                 $html .= "<div id='login-error'>" . i8ln('We found you are a member of the following discord server we have blacklisted: ') . $_GET['bl-discord'] . "</div>";
                                 break;
+                            case 'bad-response-dc':
+                                $html .= "<div id='login-error'>" . i8ln('Something went wrong while receiving Discord information, please try again in a few seconds and contact your admin if the problem persists.') . " (" . $_GET['error-message'] . ")</div>";
+                                break;
                             case 'duplicate-login':
                                 $html .= "<div id='login-error'>" . i8ln('We logged you out because a different device just logged in with the same account.') . "</div>";
                                 break;
@@ -107,7 +110,10 @@ if (isset($_GET['action'])) {
                         $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=discord-login';\" value='Login with discord'><i class='fab fa-discord'></i>&nbsp" . i8ln('Login with Discord') . "</button>";
                     }
                     if ($noFacebookLogin === false) {
-                        $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=facebook-login';\" value='Login with discord'><i class='fab fa-facebook'></i>&nbsp" . i8ln('Login with Facebook') . "</button>";
+                        $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=facebook-login';\" value='Login with facebook'><i class='fab fa-facebook'></i>&nbsp" . i8ln('Login with Facebook') . "</button>";
+                    }
+                    if ($noGroupmeLogin === false) {
+                        $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=groupme-login';\" value='Login with groupme'><i class='fas fa-smile'></i>&nbsp" . i8ln('Login with Groupme') . "</button>";
                     }
                     if ($noPatreonLogin === false) {
                         $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=patreon-login';\" value='Login with patreon'><i class='fab fa-patreon'></i>&nbsp" . i8ln('Login with Patreon') . "</button>";
@@ -118,7 +124,7 @@ if (isset($_GET['action'])) {
                         $html .= "<button type='button' style='background-color: #4CAF50; margin: 2px' onclick=\"location.href='./register?action=account';\" value='Register'><i class='fas fa-user'></i>&nbsp" . i8ln('Register') . "</button>";
                         $html .= "<button type='button' style='background-color: #4CAF50; margin: 2px' onclick=\"location.href='./register?action=password-reset';\" value='Forgot password?'><i class='fas fa-lock'></i>&nbsp" . i8ln('Forgot Password') . "</button>";
                     }
-                    if ($noNativeLogin && $noDiscordLogin && $noFacebookLogin) {
+                    if ($noNativeLogin && $noDiscordLogin && $noFacebookLogin && $noPatreonLogin) {
                         header("Location: ./");
                         die();
                     }
@@ -211,6 +217,10 @@ if (isset($_GET['action'])) {
 
         header("Location: {$loginUrl}");
         die();
+    }
+    if ($_GET['action'] == 'groupme-login') {
+        header("Location: https://oauth.groupme.com/oauth/authorize?client_id=" . $groupmeClientId);
+        die();
     } else {
         header("Location: .");
         die();
@@ -245,7 +255,6 @@ if (isset($_GET['callback'])) {
 
                 $user = request($user_request, $access_token);
                 $guilds = request($guilds_request, $access_token);
-
                 if (in_array($user->id, $userBlacklist)) {
                     logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has been blacklisted\n");
                     header("Location: ./login?action=login&error=blacklisted-member");
@@ -256,16 +265,16 @@ if (isset($_GET['callback'])) {
                         $whiteListed = true;
                     } else {
                         foreach ($guilds as $guild) {
-                            $uses = $guild->id;
-                            $guildName = $guild->name;
-                            if (in_array($uses, $serverBlacklist)) {
-                                if ($logFailedLogin) {
-                                    logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has been blocked for being a member of " . $guildName . "\n");
+                            if (!empty($guild->id)) {
+                                if (in_array($guild->id, $serverBlacklist)) {
+                                    if ($logFailedLogin) {
+                                        logFailure(strval($user->{'username'}) . "#" . $user->{'discriminator'} . " has been blocked for being a member of " . $guild->name . "\n");
+                                    }
+                                    header("Location: ./login?action=login&error=blacklisted-server-dc&bl-discord=" . $guild->name . " ");
+                                    die();
+                                } elseif (array_key_exists($guild->id, $guildRoles['guildIDS'])) {
+                                    $whiteListed = true;
                                 }
-                                header("Location: ./login?action=login&error=blacklisted-server-dc&bl-discord=" . $guildName . " ");
-                                die();
-                            } elseif (array_key_exists($uses, $guildRoles['guildIDS'])) {
-                                $whiteListed = true;
                             }
                         }
                     }
@@ -346,6 +355,9 @@ if (isset($_GET['callback'])) {
                 if ($useLoginCookie) {
                     setrawcookie("LoginSession", $_SESSION['token'], time() + $response->expires_in);
                 }
+            } else {
+                header("Location: ./login?action=login&error=bad-response-dc&error-message=token");
+                die();
             }
             if ($whiteListed === true) {
                 header("Location: .?login=true");
@@ -444,6 +456,49 @@ if (isset($_GET['callback'])) {
             if ($useLoginCookie) {
                 setrawcookie("LoginSession", $_SESSION['token'], time() + $sessionLifetime);
             }
+            header("Location: .?login=true");
+            die();
+        }
+    }
+    if ($_GET['callback'] == 'groupme') {
+        if ($_GET['?access_token']) {
+            $userToken = $_GET['?access_token'];
+            $headers = array();
+            $headers[] = "X-Access-Token: $userToken";
+            $headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=utf-8';
+            $user_request = curl_init();
+                curl_setopt($user_request, CURLOPT_URL,"https://api.groupme.com/v3/users/me");
+                curl_setopt($user_request, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($user_request, CURLOPT_HTTPHEADER, $headers);
+                $user = curl_exec ($user_request);
+                $user = json_decode($user);
+                $user = $user->response;
+
+            if ($manualdb->has('users', ['id' => $user->user_id, 'login_system' => 'groupme'])) {
+                $manualdb->update('users', [
+                    'session_id' => $userToken,
+                    'expire_timestamp' => time() + 86400,
+                    'user' => $user->name,
+                    'access_level' => $groupmeAccessLevel,
+                    'avatar' => $user->image_url,
+                ], [
+                    'id' => $user->user_id,
+                    'login_system' => 'groupme'
+                ]);
+            } else {
+                $manualdb->insert('users', [
+                    'session_id' => $userToken,
+                    'id' => $user->user_id,
+                    'user' => $user->name,
+                    'access_level' => $groupmeAccessLevel,
+                    'avatar' => $user->image_url,
+                    'access_level' => null,
+                    'expire_timestamp' => time() + 86400,
+                    'login_system' => 'groupme'
+                ]);
+            }
+            setcookie("LoginCookie", $userToken, time() + 86400);
+            setcookie("LoginEngine", 'groupme', time() + 86400);
             header("Location: .?login=true");
             die();
         }
@@ -609,8 +664,14 @@ function request($request, $access_token) {
         ],
         CURLOPT_RETURNTRANSFER => true
     ]);
-    return json_decode(curl_exec($info_request));
-    curl_close($info);
+    $response = curl_exec($info_request);
+    if (curl_getinfo($info_request, CURLINFO_HTTP_CODE) != 200) {
+        header("Location: ./login?action=login&error=bad-response-dc&error-message=request");
+        die();
+    } else {
+        curl_close($info_request);
+        return json_decode($response);
+    }
 }
 
 function logFailure($logFailure) {

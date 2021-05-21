@@ -219,6 +219,8 @@
     "defaultDustAmount": true,
     "noCatchRates": true,
     "nestAvgDefault": true,
-    "noHideSingleMarker": true
+    "noHideSingleMarker": true,
+    "noNestPolygon": true,
+    "nestBotName": true
   }
 }

@@ -212,6 +212,8 @@ var searchProvider = new OpenStreetMapProvider()
 // Extras
 //
 
+var _mapLoaded = false
+
 L.Marker.addInitHook(function () {
     if (this.options.virtual) {
         this.on('add', function () {
@@ -649,6 +651,8 @@ function initMap() { // eslint-disable-line no-unused-vars
 
         $selectLocationIconMarker.val(Store.get('locationMarkerStyle')).trigger('change')
     })
+
+    _mapLoaded = true
 }
 
 function toggleFullscreenMap() { // eslint-disable-line no-unused-vars
@@ -995,7 +999,7 @@ function buildScanPolygons() {
 }
 
 function buildNestPolygons() {
-    if (!Store.get(['showNestPolygon'])) {
+    if (!Store.get(['showNestPolygon']) || !Store.get(['showNests'])) {
         return false
     }
 
@@ -1235,6 +1239,21 @@ function openMapDirections(lat, lng) { // eslint-disable-line no-unused-vars
     window.open(url, '_blank')
 }
 
+function copyCoordsToClipboard(coordsElementNode) { // eslint-disable-line no-unused-vars
+    var range
+    var sel
+    try {
+        range = document.createRange()
+        range.selectNodeContents(coordsElementNode)
+        sel = window.getSelection()
+        sel.removeAllRanges()
+        sel.addRange(range)
+        document.execCommand('Copy')
+    } catch (ex) {
+        alert(ex)
+    }
+}
+
 // Converts timestamp to readable String
 function getDateStr(t) { // eslint-disable-line no-unused-vars
     var dateStr = 'Unknown'
@@ -1430,8 +1449,14 @@ function pokemonLabel(item) {
     }
     contentstring +=
     '<a href="javascript:void(0)" onclick="javascript:openMapDirections(' + latitude + ', ' + longitude + ')" title="' + i8ln('View in Maps') + '">' +
-    '<i class="fas fa-road"></i> ' + coordText + '</a> - ' +
-    '<a href="./?lat=' + latitude + '&lon=' + longitude + '&zoom=18&encId=' + encounterId + '">' +
+    '<i class="fas fa-road" style="padding-right:0.25em"></i>' + coordText + '</a>'
+    if (hidePokemonCoords === true) {
+        contentstring += '-'
+    } else {
+        contentstring += ' ' +
+                '<button onclick="copyCoordsToClipboard(this.previousElementSibling);" class="small-tight">' + 'Copy' + '</button> '
+    }
+    contentstring += '<a href="./?lat=' + latitude + '&lon=' + longitude + '&zoom=18&encId=' + encounterId + '">' +
     '<i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;margin-bottom:10px;font-size:18px;"></i>' +
     '</a></center></div>'
     if (atk != null && def != null && sta != null) {
@@ -1570,6 +1595,7 @@ function gymLabel(item) {
     if (url !== null) {
         gymImage = '<img id="' + item['gym_id'] + '"class="gym-image" style="border:3px solid rgba(' + gymColor[teamId] + ')" src="' + url + '" onclick="openFullscreenModal(document.getElementById(\'' + item['gym_id'] + '\').src)">'
     }
+    var inBattle = (item['in_battle'] === 1 && lastScanned > (Date.now() - 15 * 60)) ? '<img src="static/images/in_battle_small.png" style="position:absolute;right:170px;bottom:140px;"/>' : ''
     var teamStr = (teamId === 0) ? i8ln('Uncontested Gym') : '<b style="color:rgba(' + gymColor[teamId] + ')">' + i8ln('Team') + ' ' + i8ln(teamName) + '</b><br>'
     var whatsappLink = ''
     var exGym = (item.park && item.park !== '0') ? i8ln('%20(EX Gym)') : ''
@@ -1591,12 +1617,20 @@ function gymLabel(item) {
         '</div>' +
         '<div>' +
         gymImage +
+        inBattle +
         raidIcon +
         '</div>' +
         '<div><b>' + freeSlots + ' ' + i8ln('Free Slots') + '</b></div>' +
         raidStr +
         '<div>' +
-        '<a href="javascript:void(0);" onclick="javascript:openMapDirections(' + latitude + ',' + longitude + ');" title="' + i8ln('View in Maps') + '"><i class="fas fa-road"></i> ' + coordText + '</a> - <a href="./?lat=' + latitude + '&lon=' + longitude + '&zoom=18&gymId=' + item['gym_id'] + '"><i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;font-size:20px;"></i></a>' +
+        '<a href="javascript:void(0);" onclick="javascript:openMapDirections(' + latitude + ',' + longitude + ');" title="' + i8ln('View in Maps') + '"><i class="fas fa-road" style="padding-right:0.25em"></i>' + coordText + '</a>'
+    if (hideGymCoords === true) {
+        str += '-'
+    } else {
+        str += ' ' +
+                '<button onclick="copyCoordsToClipboard(this.previousElementSibling);" class="small-tight">' + 'Copy' + '</button> '
+    }
+    str += '<a href="./?lat=' + latitude + '&lon=' + longitude + '&zoom=18&gymId=' + item['gym_id'] + '"><i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;font-size:20px;"></i></a>' +
         whatsappLink +
         '</div>' +
         '<div>' +
@@ -1902,14 +1936,16 @@ function pokestopLabel(item) {
     }
     if (!noLures && item['lure_expiration'] > Date.now()) {
         var lureType = '<img style="padding:5px;position:relative;left:0px;top:12px;height:40px;" src="static/forts/LureModule_' + item['lure_id'] + '.png"/>'
-        if (item['lure_id'] === 1) {
+        if (item['lure_id'] === 501) {
             lureType += i8ln('Normal')
-        } else if (item['lure_id'] === 2) {
+        } else if (item['lure_id'] === 502) {
             lureType += i8ln('Glacial')
-        } else if (item['lure_id'] === 3) {
+        } else if (item['lure_id'] === 503) {
             lureType += i8ln('Mossy')
-        } else if (item['lure_id'] === 4) {
+        } else if (item['lure_id'] === 504) {
             lureType += i8ln('Magnetic')
+        } else if (item['lure_id'] === 505) {
+            lureType += i8ln('Rainy')
         }
         lureEndStr = getTimeStr(item['lure_expiration'])
         str +=
@@ -1980,7 +2016,14 @@ function pokestopLabel(item) {
         coordText = i8ln('Directions')
     }
     str += '<div><center>' +
-        '<a href="javascript:void(0)" onclick="javascript:openMapDirections(' + item['latitude'] + ',' + item['longitude'] + ')" title="' + i8ln('View in Maps') + '"><i class="fas fa-road"></i> ' + coordText + '</a> - <a href="./?lat=' + item['latitude'] + '&lon=' + item['longitude'] + '&zoom=18&stopId=' + item['pokestop_id'] + '"><i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;font-size:20px;"></i></a>'
+        '<a href="javascript:void(0)" onclick="javascript:openMapDirections(' + item['latitude'] + ',' + item['longitude'] + ')" title="' + i8ln('View in Maps') + '"><i class="fas fa-road" style="padding-right:0.25em"></i>' + coordText + '</a>'
+    if (hidePokestopCoords === true) {
+        str += '-'
+    } else {
+        str += ' ' +
+                '<button onclick="copyCoordsToClipboard(this.previousElementSibling);" class="small-tight">' + 'Copy' + '</button> '
+    }
+    str += '<a href="./?lat=' + item['latitude'] + '&lon=' + item['longitude'] + '&zoom=18&stopId=' + item['pokestop_id'] + '"><i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;font-size:20px;"></i></a>'
     if (!noQuests && !noWhatsappLink && item['quest_type'] !== null && lastMidnight < Number(item['quest_timestamp'])) {
         var quest = getQuest(item)
         var reward = ''
@@ -2241,12 +2284,14 @@ function getGymMarkerIcon(item) {
     var teamStr = (team === 0 || level === null) ? gymTypes[item['team_id']] : gymTypes[item['team_id']] + '_' + level
     var fortMarker = ''
     var exIcon = (((park !== '0' && onlyTriggerGyms === false && park) || triggerGyms.includes(item['gym_id'])) && (noExGyms === false)) ? '<img src="static/images/ex.png" style="position:absolute;right:25px;bottom:2px;"/>' : ''
+    var inBattle = (item['in_battle'] === 1 && item.last_scanned > (Date.now() - 15 * 60)) ? '<img src="static/images/in_battle_small.png" style="width:26px;position:absolute;right:31px;bottom:28px;"/>' : ''
     var smallExIcon = (((park !== '0' && onlyTriggerGyms === false && park) || triggerGyms.includes(item['gym_id'])) && (noExGyms === false)) ? '<img src="static/images/ex.png" style="width:26px;position:absolute;right:35px;bottom:13px;"/>' : ''
     var html = ''
     if (item['raid_pokemon_id'] != null && item.raid_end > Date.now()) {
         html = '<div style="position:relative;">' +
             '<img src="static/forts/' + Store.get('gymMarkerStyle') + '/' + teamStr + '.png" style="width:50px;height:auto;"/>' +
             exIcon +
+            inBattle +
             '<img src="' + iconpath + 'pokemon_icon_' + pokemonidStr + '_' + formStr + costumeStr + evolutionStr + '.png" style="width:50px;height:auto;position:absolute;top:-15px;right:0px;"/>' +
             '</div>'
         if (noRaidTimer === false && Store.get(['showRaidTimer'])) {
@@ -2273,6 +2318,7 @@ function getGymMarkerIcon(item) {
         html = '<div style="position:relative;">' +
             '<img src="static/forts/' + Store.get('gymMarkerStyle') + '/' + teamStr + '.png" style="width:50px;height:auto;"/>' +
             exIcon +
+            inBattle +
             '<img src="static/raids/egg_' + hatchedEgg + '.png" style="width:35px;height:auto;position:absolute;top:-11px;right:18px;"/>' +
             '</div>'
         if (noRaidTimer === false && Store.get(['showRaidTimer'])) {
@@ -2299,6 +2345,7 @@ function getGymMarkerIcon(item) {
         html = '<div style="position:relative;">' +
             '<img src="static/forts/' + Store.get('gymMarkerStyle') + '/' + teamStr + '.png" style="width:50px;height:auto;"/>' +
             exIcon +
+            inBattle +
             '<img src="static/raids/egg_' + raidEgg + '.png" style="width:30px;position:absolute;top:4px;right:15px;"/>' +
             '</div>'
         if (noRaidTimer === false && Store.get(['showRaidTimer'])) {
@@ -2315,6 +2362,7 @@ function getGymMarkerIcon(item) {
         html = '<div>' +
             '<img src="static/forts/' + Store.get('gymMarkerStyle') + '/' + teamStr + '.png" style="width:35px;height:auto;"/>' +
             smallExIcon +
+            inBattle +
             '</div>'
         fortMarker = L.divIcon({
             iconSize: [50, 50],
@@ -2712,14 +2760,7 @@ function setupPokestopMarker(item) {
 function setupNestMarker(item) {
     var getNestMarkerIcon = ''
     if (item.pokemon_id > 0) {
-        var pokemonIdStr = ''
-        if (item.pokemon_id <= 9) {
-            pokemonIdStr = '00' + item.pokemon_id
-        } else if (item.pokemon_id <= 99) {
-            pokemonIdStr = '0' + item.pokemon_id
-        } else {
-            pokemonIdStr = item.pokemon_id
-        }
+        var pokemonIdStr = (item.pokemon_id <= 9) ? '00' + item.pokemon_id : (item.pokemon_id <= 99) ? '0' + item.pokemon_id : item.pokemon_id
         getNestMarkerIcon = '<div class="marker-nests">' +
             '<img src="static/images/nest-' + item.english_pokemon_types[0].type.toLowerCase() + '.png" style="width:45px;height: auto;"/>' +
             '<img src="' + iconpath + 'pokemon_icon_' + pokemonIdStr + '_00.png" style="position:absolute;width:40px;height:40px;top:6px;left:3px"/>' +
@@ -2736,6 +2777,13 @@ function setupNestMarker(item) {
         className: 'marker-nests',
         html: getNestMarkerIcon
     })
+    if (noNestPolygon === false && Store.get('showNestPolygon') === true) {
+        var polygonColor = item['pokemon_types'][0]['color'] ? item['pokemon_types'][0]['color'] : 'grey'
+        var polygon = L.polygon(JSON.parse(item['polygon_path']), {
+            color: polygonColor
+        })
+        nestLayerGroup.addLayer(polygon)
+    }
     var marker = L.marker([item['lat'], item['lon']], {icon: nestMarkerIcon, zIndexOffset: 1020, virtal: true}).bindPopup(nestLabel(item), {autoPan: false, closeOnClick: false, autoClose: false})
     markers.addLayer(marker)
     addListeners(marker)
@@ -2751,22 +2799,13 @@ function nestLabel(item) {
         $.each(types, function (index, type) {
             typesDisplay += getTypeSpan(type)
         })
-        var pokemonIdStr = ''
-        if (item.pokemon_id <= 9) {
-            pokemonIdStr = '00' + item.pokemon_id
-        } else if (item.pokemon_id <= 99) {
-            pokemonIdStr = '0' + item.pokemon_id
-        } else {
-            pokemonIdStr = item.pokemon_id
-        }
-        var nestName = ''
-        if (item['name'] !== null && item['name'] !== 'Unknown Areaname') {
-            nestName = '<b>' + item['name'] + '</b>'
-        }
-        var pokemonAvg = ''
-        if (item['pokemon_avg'] > 0) {
-            pokemonAvg = '<div>' + i8ln('Nest Pokemon per hour') + ': ' + item['pokemon_avg'].toFixed(2) + '</div>'
-        }
+        var formStr = (item.pokemon_form === 0 || item.pokemon_form === '0' || item.pokemon_form == null) ? '00' : item.pokemon_form
+        var pokemonIdStr = (item.pokemon_id <= 9) ? '00' + item.pokemon_id : (item.pokemon_id <= 99) ? '0' + item.pokemon_id : item.pokemon_id
+        var nestName = (item['name'] !== null && item['name'] !== 'Unknown Areaname') ? '<b>' + item['name'] + '</b>' : ''
+        var pokemonAvg = (item['pokemon_avg'] > 0) ? '<div>' + i8ln('Nest Pokemon per hour') + ': ' + item['pokemon_avg'].toFixed(2) + '</div>' : ''
+        var pokemonCount = (item['pokemon_count'] > 0) ? '<div>' + i8ln('Total nest Pokemon count') + ': ' + item['pokemon_count'] + '</div>' : ''
+        var nestSubmittedBy = (item['nest_submitted_by'] !== null) ? '<div>' + i8ln('Submitted by') + ': ' + item['nest_submitted_by'] + '</div>' : ''
+
         str += '<center>' +
             '<div>' +
             item.pokemon_name + ' - ' +
@@ -2774,9 +2813,11 @@ function nestLabel(item) {
             '</div>' +
             nestName + '<br />' +
             '<div>' +
-            '<img src="' + iconpath + 'pokemon_icon_' + pokemonIdStr + '_00.png" style="width:65px;height:65px;"/>' +
+            '<img src="' + iconpath + 'pokemon_icon_' + pokemonIdStr + '_' + formStr + '.png" style="width:65px;height:65px;"/>' +
             '</div>' +
             pokemonAvg +
+            pokemonCount +
+            nestSubmittedBy +
             '</center>'
     } else {
         str += '<div align="center" class="marker-nests">' +
@@ -2784,8 +2825,8 @@ function nestLabel(item) {
             '</div>' +
             '<center><b>' + i8ln('No Pokemon - Assign One Below') + '</b></center>'
     }
-    if (item.type === 1) {
-        str += '<center><div style="margin-bottom:5px; margin-top:5px;">' + i8ln('As found on thesilphroad.com') + '</div></center>'
+    if (item.type === 0) {
+        str += '<center><div style="margin-bottom:5px; margin-top:5px;">' + i8ln('Found by ') + nestBotName + '</div></center>'
     }
     if (!noDeleteNests) {
         str += '<i class="fas fa-trash-alt delete-nest" onclick="deleteNest(event);" data-id="' + item['nest_id'] + '"></i>'
@@ -2798,7 +2839,14 @@ function nestLabel(item) {
         coordText = i8ln('Directions')
     }
     str += '<center><div>' +
-        '<a href="javascript:void(0)" onclick="javascript:openMapDirections(' + item.lat + ',' + item.lon + ')" title="' + i8ln('View in Maps') + '"><i class="fas fa-road"></i> ' + coordText + '</a> - <a href="./?lat=' + item.lat + '&lon=' + item.lon + '&zoom=18"><i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;font-size:20px;"></i></a>' +
+        '<a href="javascript:void(0)" onclick="javascript:openMapDirections(' + item.lat + ',' + item.lon + ')" title="' + i8ln('View in Maps') + '"><i class="fas fa-road" style="padding-right:0.25em"></i>' + coordText + '</a>'
+    if (hideNestCoords === true) {
+        str += '-'
+    } else {
+        str += ' ' +
+                '<button onclick="copyCoordsToClipboard(this.previousElementSibling);" class="small-tight">' + 'Copy' + '</button> '
+    }
+    str += '<a href="./?lat=' + item.lat + '&lon=' + item.lon + '&zoom=18"><i class="far fa-share-square" aria-hidden="true" style="position:relative;top:3px;left:0px;color:#26c300;font-size:20px;"></i></a>' +
         '</div></center>'
     if (!noWhatsappLink && item.pokemon_id > 0) {
         str += '<div>' +
@@ -2807,6 +2855,7 @@ function nestLabel(item) {
             '</center>' +
             '</div>'
     }
+    str += '<center><div>' + i8ln('Last Updated') + ': ' + getDateStr(item['updated']) + ' ' + getTimeStr(item['updated']) + '</div></center>'
     return str
 }
 
@@ -3493,11 +3542,11 @@ function searchForItem(lat, lon, term, type, field) {
                         if (element.quest_item_id !== 0) {
                             html += '<span style="background:url(' + iconpath + 'rewards/reward_' + element.quest_item_id + '_' + element.quest_reward_amount + '.png) no-repeat;" class="i-icon" ></span>'
                         }
-                        if (element.quest_reward_type === 12) {
-                            html += '<span style="background:url(' + iconpath + 'rewards/reward_mega_energy_' + element.quest_energy_pokemon_id + '.png) no-repeat;" class="i-icon" ></span>'
-                        }
                         if (element.quest_reward_type === 3) {
                             html += '<span style="background:url(' + iconpath + 'rewards/reward_stardust_' + element.quest_dust_amount + '.png) no-repeat;" class="i-icon" ></span>'
+                        }
+                        if (element.quest_reward_type === 12) {
+                            html += '<span style="background:url(' + iconpath + 'rewards/reward_mega_energy_' + element.quest_energy_pokemon_id + '.png) no-repeat;" class="i-icon" ></span>'
                         }
                     }
                     html += '<div class="cont">'
@@ -5120,7 +5169,23 @@ function processPokemons(i, item) {
     if (!Store.get('showPokemon')) {
         return false // in case the checkbox was unchecked in the meantime.
     }
-    if (!(item['encounter_id'] in mapData.pokemons) && item['disappear_time'] > Date.now() && ((encounterId && encounterId === item['encounter_id']) || (excludedPokemon.indexOf(item['pokemon_id']) < 0 && !isTemporaryHidden(item['pokemon_id'])))) {
+    if (item['disappear_time'] > Date.now() && ((encounterId && encounterId === item['encounter_id']) || (excludedPokemon.indexOf(item['pokemon_id']) < 0 && !isTemporaryHidden(item['pokemon_id'])))) {
+        if (item['encounter_id'] in mapData.pokemons) {
+            if ((mapData.pokemons[item['encounter_id']]['individual_attack'] !== item['individual_attack']) || (mapData.pokemons[item['encounter_id']]['individual_defense'] !== item['individual_defense']) || (mapData.pokemons[item['encounter_id']]['individual_stamina'] !== item['individual_stamina'])) {
+                // updated information received. delete marker and item from dict
+                if (mapData.pokemons[item['encounter_id']].marker.rangeCircle) {
+                    markers.removeLayer(mapData.pokemons[item['encounter_id']].marker.rangeCircle)
+                    markersnotify.removeLayer(mapData.pokemons[item['encounter_id']].marker.rangeCircle)
+                    delete mapData.pokemons[item['encounter_id']].marker.rangeCircle
+                }
+                markers.removeLayer(mapData.pokemons[item['encounter_id']].marker)
+                markersnotify.removeLayer(mapData.pokemons[item['encounter_id']].marker)
+                delete mapData.pokemons[item['encounter_id']]
+            } else {
+                // in mapData and appears up to date, skip
+                return true
+            }
+        }
         // add marker to map and item to dict
         if (item.marker) {
             markers.removeLayer(item.marker)
@@ -5678,122 +5743,124 @@ function updateSpawnPoints() {
 }
 
 function updateMap() {
-    var position = map.getCenter()
-    var lastMidnight = ''
-    var d = new Date()
-    if (mapFork === 'mad') {
-        lastMidnight = d.setHours(0, 0, 0, 0) / 1000
-    } else {
-        lastMidnight = 0
-    }
-    Store.set('startAtLastLocationPosition', {
-        lat: position.lat,
-        lng: position.lng
-    })
-    // lets try and get the s2 cell id in the middle
-    var s2CellCenter = S2.keyToId(S2.latLngToKey(position.lat, position.lng, 10))
-    if ((s2CellCenter) && (String(s2CellCenter) !== $('#currentWeather').data('current-cell')) && (map.getZoom() > 13)) {
-        loadWeatherCellData(s2CellCenter).done(function (cellWeather) {
-            var currentWeather = cellWeather.weather
-            var currentCell = $('#currentWeather').data('current-cell')
-            if ((currentWeather) && (currentCell !== currentWeather.s2_cell_id)) {
-                $('#currentWeather').data('current-cell', currentWeather.s2_cell_id)
-                $('#currentWeather').html('<img src="static/weather/' + currentWeather.condition + '.png" alt="" height="55px"">')
-            } else if (!currentWeather) {
-                $('#currentWeather').data('current-cell', '')
-                $('#currentWeather').html('')
+    if (_mapLoaded) {
+        var position = map.getCenter()
+        var lastMidnight = ''
+        var d = new Date()
+        if (mapFork === 'mad') {
+            lastMidnight = d.setHours(0, 0, 0, 0) / 1000
+        } else {
+            lastMidnight = 0
+        }
+        Store.set('startAtLastLocationPosition', {
+            lat: position.lat,
+            lng: position.lng
+        })
+        // lets try and get the s2 cell id in the middle
+        var s2CellCenter = S2.keyToId(S2.latLngToKey(position.lat, position.lng, 10))
+        if ((s2CellCenter) && (String(s2CellCenter) !== $('#currentWeather').data('current-cell')) && (map.getZoom() > 13)) {
+            loadWeatherCellData(s2CellCenter).done(function (cellWeather) {
+                var currentWeather = cellWeather.weather
+                var currentCell = $('#currentWeather').data('current-cell')
+                if ((currentWeather) && (currentCell !== currentWeather.s2_cell_id)) {
+                    $('#currentWeather').data('current-cell', currentWeather.s2_cell_id)
+                    $('#currentWeather').html('<img src="static/weather/' + currentWeather.condition + '.png" alt="" height="55px"">')
+                } else if (!currentWeather) {
+                    $('#currentWeather').data('current-cell', '')
+                    $('#currentWeather').html('')
+                }
+            })
+        }
+        loadRawData().done(function (result) {
+            $.each(result.pokemons, processPokemons)
+            $.each(result.pokestops, processPokestops, lastMidnight)
+            $.each(result.gyms, processGyms)
+            $.each(result.spawnpoints, processSpawnpoints)
+            $.each(result.scanlocations, processScanlocation)
+            $.each(result.nests, processNests)
+            $.each(result.communities, processCommunities)
+            $.each(result.portals, processPortals)
+            $.each(result.pois, processPois)
+            showInBoundsMarkers(mapData.pokemons, 'pokemon')
+            showInBoundsMarkers(mapData.gyms, 'gym')
+            showInBoundsMarkers(mapData.pokestops, 'pokestop')
+            showInBoundsMarkers(mapData.spawnpoints, 'inbound')
+
+            clearStaleMarkers()
+
+            updateSpawnPoints()
+            updatePokestops()
+            updatePortals()
+
+            if ($('#stats').hasClass('visible')) {
+                countMarkers(map)
             }
+
+            oSwLat = result.oSwLat
+            oSwLng = result.oSwLng
+            oNeLat = result.oNeLat
+            oNeLng = result.oNeLng
+
+            lastgyms = result.lastgyms
+            lastpokestops = result.lastpokestops
+            lastpokemon = result.lastpokemon
+            lastslocs = result.lastslocs
+            lastspawns = result.lastspawns
+            lastnests = result.lastnests
+            lastcommunities = result.lastcommunities
+            lastportals = result.lastportals
+            lastpois = result.lastpois
+
+            prevMinIV = result.preMinIV
+            prevMinLevel = result.preMinLevel
+            reids = result.reids
+            qpreids = result.qpreids
+            qireids = result.qireids
+            qereids = result.qereids
+            greids = result.greids
+            rbreids = result.rbreids
+            rereids = result.rereids
+            if (reids instanceof Array) {
+                reincludedPokemon = reids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedPokemon)
+            }
+            if (qpreids instanceof Array) {
+                reincludedQuestsPokemon = qpreids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedQuestsPokemon)
+            }
+            if (qereids instanceof Array) {
+                reincludedQuestsEnergy = qereids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedQuestsEnergy)
+            }
+            if (qireids instanceof Array) {
+                reincludedQuestsItem = qireids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedQuestsItem)
+            }
+            if (greids instanceof Array) {
+                reincludedGrunts = greids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedGrunts)
+            }
+            if (rbreids instanceof Array) {
+                reincludedRaidboss = rbreids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedRaidboss)
+            }
+            if (rereids instanceof Array) {
+                reincludedRaidegg = rereids.filter(function (e) {
+                    return this.indexOf(e) < 0
+                }, reincludedRaidegg)
+            }
+            reloaddustamount = false
+            timestamp = result.timestamp
+            lastUpdateTime = Date.now()
+            token = result.token
         })
     }
-    loadRawData().done(function (result) {
-        $.each(result.pokemons, processPokemons)
-        $.each(result.pokestops, processPokestops, lastMidnight)
-        $.each(result.gyms, processGyms)
-        $.each(result.spawnpoints, processSpawnpoints)
-        $.each(result.scanlocations, processScanlocation)
-        $.each(result.nests, processNests)
-        $.each(result.communities, processCommunities)
-        $.each(result.portals, processPortals)
-        $.each(result.pois, processPois)
-        showInBoundsMarkers(mapData.pokemons, 'pokemon')
-        showInBoundsMarkers(mapData.gyms, 'gym')
-        showInBoundsMarkers(mapData.pokestops, 'pokestop')
-        showInBoundsMarkers(mapData.spawnpoints, 'inbound')
-
-        clearStaleMarkers()
-
-        updateSpawnPoints()
-        updatePokestops()
-        updatePortals()
-
-        if ($('#stats').hasClass('visible')) {
-            countMarkers(map)
-        }
-
-        oSwLat = result.oSwLat
-        oSwLng = result.oSwLng
-        oNeLat = result.oNeLat
-        oNeLng = result.oNeLng
-
-        lastgyms = result.lastgyms
-        lastpokestops = result.lastpokestops
-        lastpokemon = result.lastpokemon
-        lastslocs = result.lastslocs
-        lastspawns = result.lastspawns
-        lastnests = result.lastnests
-        lastcommunities = result.lastcommunities
-        lastportals = result.lastportals
-        lastpois = result.lastpois
-
-        prevMinIV = result.preMinIV
-        prevMinLevel = result.preMinLevel
-        reids = result.reids
-        qpreids = result.qpreids
-        qireids = result.qireids
-        qereids = result.qereids
-        greids = result.greids
-        rbreids = result.rbreids
-        rereids = result.rereids
-        if (reids instanceof Array) {
-            reincludedPokemon = reids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedPokemon)
-        }
-        if (qpreids instanceof Array) {
-            reincludedQuestsPokemon = qpreids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedQuestsPokemon)
-        }
-        if (qereids instanceof Array) {
-            reincludedQuestsEnergy = qereids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedQuestsEnergy)
-        }
-        if (qireids instanceof Array) {
-            reincludedQuestsItem = qireids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedQuestsItem)
-        }
-        if (greids instanceof Array) {
-            reincludedGrunts = greids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedGrunts)
-        }
-        if (rbreids instanceof Array) {
-            reincludedRaidboss = rbreids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedRaidboss)
-        }
-        if (rereids instanceof Array) {
-            reincludedRaidegg = rereids.filter(function (e) {
-                return this.indexOf(e) < 0
-            }, reincludedRaidegg)
-        }
-        reloaddustamount = false
-        timestamp = result.timestamp
-        lastUpdateTime = Date.now()
-        token = result.token
-    })
 }
 
 function updateWeatherOverlay() {
@@ -6560,7 +6627,11 @@ $(function () {
         })
         $selectStyle.on('change', function (e) {
             selectedStyle = $selectStyle.val()
-            setTileLayer(selectedStyle)
+
+            if (_mapLoaded) {
+                setTileLayer(selectedStyle)
+            }
+
             Store.set('map_style', selectedStyle)
         })
 
@@ -6916,24 +6987,12 @@ $(function () {
             Store.set('remember_select_exclude_min_iv', excludedMinIV)
         })
         $textMinIV.on('change', function (e) {
-            minIV = parseInt($textMinIV.val(), 10)
-            if (isNaN(minIV) || minIV < 0) {
-                minIV = ''
-            }
-            if (minIV > 100) {
-                minIV = 100
-            }
+            minIV = Math.max(0, Math.min(parseInt($textMinIV.val(), 10) || 0, 100))
             $textMinIV.val(minIV)
             Store.set('remember_text_min_iv', minIV)
         })
         $textMinLevel.on('change', function (e) {
-            minLevel = parseInt($textMinLevel.val(), 10)
-            if (isNaN(minLevel) || minLevel < 0) {
-                minLevel = ''
-            }
-            if (minLevel > 35) {
-                minLevel = 35
-            }
+            minLevel = Math.max(0, Math.min(parseInt($textMinLevel.val(), 10) || 0, 35))
             $textMinLevel.val(minLevel)
             Store.set('remember_text_min_level', minLevel)
         })
@@ -6958,24 +7017,12 @@ $(function () {
             Store.set('remember_select_rarity_notify', notifiedRarity)
         })
         $textPerfectionNotify.on('change', function (e) {
-            notifiedMinPerfection = parseInt($textPerfectionNotify.val(), 10)
-            if (isNaN(notifiedMinPerfection) || notifiedMinPerfection <= 0) {
-                notifiedMinPerfection = ''
-            }
-            if (notifiedMinPerfection > 100) {
-                notifiedMinPerfection = 100
-            }
+            notifiedMinPerfection = Math.max(0, Math.min(parseInt($textPerfectionNotify.val(), 10) || 0, 100))
             $textPerfectionNotify.val(notifiedMinPerfection)
             Store.set('remember_text_perfection_notify', notifiedMinPerfection)
         })
         $textLevelNotify.on('change', function (e) {
-            notifiedMinLevel = parseInt($textLevelNotify.val(), 10)
-            if (isNaN(notifiedMinLevel) || notifiedMinLevel <= 0) {
-                notifiedMinLevel = ''
-            }
-            if (notifiedMinLevel > 35) {
-                notifiedMinLevel = 35
-            }
+            notifiedMinLevel = Math.max(0, Math.min(parseInt($textLevelNotify.val(), 10) || 0, 35))
             $textLevelNotify.val(notifiedMinLevel)
             Store.set('remember_text_level_notify', notifiedMinLevel)
         })
@@ -7232,9 +7279,11 @@ $(function () {
     })
     $('#nests-switch').change(function () {
         if (!this.checked && Store.get('showNestPolygon') === true) {
-            Store.set('showNestPolygon', false)
-            $('#nest-polygon-switch').prop('checked', false)
             nestLayerGroup.clearLayers()
+        }
+        Store.set('showNests', this.checked)
+        if (Store.get('showNestPolygon') === true) {
+            buildNestPolygons()
         }
         var options = {
             'duration': 500
@@ -7369,6 +7418,8 @@ $(function () {
         Store.set('showNestPolygon', this.checked)
         if (this.checked) {
             buildNestPolygons()
+            lastnests = false
+            updateMap()
         } else {
             nestLayerGroup.clearLayers()
         }
