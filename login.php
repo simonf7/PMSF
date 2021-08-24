@@ -108,6 +108,7 @@ if (isset($_GET['action'])) {
                     }
                     if ($noDiscordLogin === false) {
                         $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=discord-login';\" value='Login with discord'><i class='fab fa-discord'></i>&nbsp" . i8ln('Login with Discord') . "</button>";
+                        $html .= "<p>In order to login with Discord we will need to access and store the list of servers you belong to so that we may check you are a member of the <a href=\"https://discord.gg/BPBg6NK\" target=\"_blank\">Pokemon Go! Norwich</a> server and not a member of any related to breaking the terms of Pokemon Go!<p>";
                     }
                     if ($noFacebookLogin === false) {
                         $html .= "<button type='button' style='background-color: #1877f2; margin: 2px' onclick=\"location.href='./login?action=facebook-login';\" value='Login with facebook'><i class='fab fa-facebook'></i>&nbsp" . i8ln('Login with Facebook') . "</button>";

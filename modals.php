@@ -90,6 +90,7 @@
                 }
                 if ($noDiscordLogin === false) {
                     echo "<button class='btn btn-primary' type='button' onclick=\"location.href='./login?action=discord-login';\" value='Login with discord'><i class='fab fa-discord'></i> " . i8ln('Login with Discord') . "</button>";
+                    echo "<p>In order to login with Discord we will need to access the list of servers you belong to so that we may check you are a member of the PogoNorwich server and not a member of any related to breaking the terms of Pokemon Go!<p>";
                 }
                 if ($noFacebookLogin === false) {
                     echo "<button class='btn btn-primary' type='button' onclick=\"location.href='./login?action=facebook-login';\" value='Login with facebook'><i class='fab fa-facebook'></i> " . i8ln('Login with Facebook') . "</button>";
