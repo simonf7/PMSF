@@ -875,7 +875,7 @@ if (!$noLoadingScreen) {
                                             </div>
                                             <div class="dropdown-divider"></div>
                                         <?php }
-                                        if (! $noSearchLocation) { ?>
+                                        if (! $noLiveScanLocation) { ?>
                                             <div class="form form-switch">
                                                 <input class="form-check-input" id="scan-location-switch" type="checkbox" name="scan-location-switch">
                                                 <label class="form-check-label" for="scan-location-switch"><?php echo i8ln('Real time scanner location') ?></label>
@@ -1170,26 +1170,26 @@ if (!$noLoadingScreen) {
                                     <div class="card-body">
                                         <div class="btn-group flex-wrap" role="group" aria-label="Nested area dropdown">
                                             <?php
-                                            foreach ($quickAreas as $name => $areaInfo) {
+                                            foreach ($quickAreas as $areaname => $areaInfo) {
                                                 if (is_string($areaInfo)) {
                                                     $areaLatLon = explode(",", $areaInfo);
-                                                    $lat = $areaLatLon[0];
-                                                    $lon = $areaLatLon[1];
-                                                    $zoom = $areaLatLon[2];
-                                                    echo '<a href="" data-lat="' . $lat . '" data-lng="' . $lon . '" data-zoom="' . $zoom . '" class="btn btn-secondary area-go-to">' . $name . '</a>';
+                                                    $arealat = $areaLatLon[0];
+                                                    $arealon = $areaLatLon[1];
+                                                    $areazoom = $areaLatLon[2];
+                                                    echo '<a href="" data-lat="' . $arealat . '" data-lng="' . $arealon . '" data-zoom="' . $areazoom . '" class="btn btn-secondary area-go-to">' . $areaname . '</a>';
                                                 } else if (is_array($areaInfo)) { ?>
                                                     <div class="btn-group" role="group">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="<?php echo $name; ?>-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <?php echo $name; ?>
+                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="<?php echo $areaname; ?>-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <?php echo $areaname; ?>
                                                         </button>
-                                                        <ul class="dropdown-menu" aria-labelledby="<?php echo $name; ?>-dropdown">
+                                                        <ul class="dropdown-menu" aria-labelledby="<?php echo $areaname; ?>-dropdown">
                                                         <?php
-                                                        foreach ($areaInfo as $name => $areaInfo) {
+                                                        foreach ($areaInfo as $areaname => $areaInfo) {
                                                             $areaLatLon = explode(",", $areaInfo);
-                                                            $lat = $areaLatLon[0];
-                                                            $lon = $areaLatLon[1];
-                                                            $zoom = $areaLatLon[2];
-                                                            echo '<li><a href="" data-lat="' . $lat . '" data-lng="' . $lon . '" data-zoom="' . $zoom . '" class="dropdown-item area-go-to">' . $name . '</a></li>';
+                                                            $arealat = $areaLatLon[0];
+                                                            $arealon = $areaLatLon[1];
+                                                            $areazoom = $areaLatLon[2];
+                                                            echo '<li><a href="" data-lat="' . $arealat . '" data-lng="' . $arealon . '" data-zoom="' . $areazoom . '" class="dropdown-item area-go-to">' . $areaname . '</a></li>';
                                                         } ?>
                                                         </ul>
                                                     </div>
@@ -1301,7 +1301,7 @@ if (!$noLoadingScreen) {
     <div class="fullscreen-toggle">
         <button class="map-toggle-button" onClick="toggleFullscreenMap();"><i class="fa fa-expand" aria-hidden="true"></i></button>
     </div>
-    <?php if (!$noSearch || (!$noSearchPokemons && !$noSearchPokestops && !$noSearchGyms && !$noSearchManualQuests && !$noSearchNests && !$noSearchPortals)) { ?>
+    <?php if (!$noSearch || (!$noSearchPokemon && !$noSearchPokestops && !$noSearchGyms && !$noSearchManualQuests && !$noSearchNests && !$noSearchPortals)) { ?>
         <div class="search-container">
             <button type="button" class="search-modal-button" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search" aria-hidden="true"></i></button>
         </div>
