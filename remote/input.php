@@ -14,8 +14,8 @@ if (isset($_FILES['sql']) && $_FILES['sql']['error'] == 0) {
      * Connect to database
      */
     $pdo = new \PDO(
-        'mysql:host=10.169.0.224;port=3306;dbname=pogonorw_mad;charset=utf8',
-        'pogonorw_mad',
+        'mysql:host=10.169.0.247;port=3306;dbname=pogonorw_map;charset=utf8',
+        'pogonorw_map',
         'dammit',
         []
     );

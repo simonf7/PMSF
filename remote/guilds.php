@@ -13,8 +13,8 @@ if (!isset($_GET['secret']) || $_GET['secret'] !== 'hoOUkjsb*(5bKJGFKA385fg42') 
  * Connect to database
  */
 $pdo = new \PDO(
-    'mysql:host=10.169.0.224;port=3306;dbname=pogonorw_mad;charset=utf8',
-    'pogonorw_mad',
+    'mysql:host=10.169.0.247;port=3306;dbname=pogonorw_map;charset=utf8',
+    'pogonorw_map',
     'dammit',
     []
 );
