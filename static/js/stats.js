@@ -25,14 +25,14 @@ function countMarkers(map) { // eslint-disable-line no-unused-vars
             thisPokeIsVisible = currentVisibleMap.contains(thisPokeLocation)
             if (thisPokeIsVisible) {
                 pkmnTotal++
-                if ((mapData.pokemons[key]['form'] === '0') && (pkmnCount[mapData.pokemons[key]['pokemon_id']] === 0 || !pkmnCount[mapData.pokemons[key]['pokemon_id']])) {
+                if ((mapData.pokemons[key]['form'] === 0) && (pkmnCount[mapData.pokemons[key]['pokemon_id']] === 0 || !pkmnCount[mapData.pokemons[key]['pokemon_id']])) {
                     pkmnCount[mapData.pokemons[key]['pokemon_id']] = {
                         'ID': mapData.pokemons[key]['pokemon_id'],
                         'Form': mapData.pokemons[key]['form'],
                         'Count': 1,
                         'Name': i8ln(mapData.pokemons[key]['pokemon_name'])
                     }
-                } else if (mapData.pokemons[key]['form'] === '0') {
+                } else if (mapData.pokemons[key]['form'] === 0) {
                     pkmnCount[mapData.pokemons[key]['pokemon_id']].Count += 1
                 }
                 if ((mapData.pokemons[key]['form'] > 0) && (pkmnCount[mapData.pokemons[key]['form']] === 0 || !pkmnCount[mapData.pokemons[key]['form']])) {
@@ -111,6 +111,27 @@ function countMarkers(map) { // eslint-disable-line no-unused-vars
             thisRaidIsVisible = currentVisibleMap.contains(thisRaidLocation)
             if (thisRaidIsVisible) {
                 if (mapData.gyms[key]['raid_end'] && mapData.gyms[key]['raid_end'] > Date.now()) {
+                    if (mapData.gyms[key]['raid_level'] === '9') {
+                        if (raidCount[9] === 0 || !raidCount[9]) {
+                            raidCount[9] = 1
+                        } else {
+                            raidCount[9] += 1
+                        }
+                    }
+                    if (mapData.gyms[key]['raid_level'] === '8') {
+                        if (raidCount[8] === 0 || !raidCount[8]) {
+                            raidCount[8] = 1
+                        } else {
+                            raidCount[8] += 1
+                        }
+                    }
+                    if (mapData.gyms[key]['raid_level'] === '7') {
+                        if (raidCount[7] === 0 || !raidCount[7]) {
+                            raidCount[7] = 1
+                        } else {
+                            raidCount[7] += 1
+                        }
+                    }
                     if (mapData.gyms[key]['raid_level'] === '6') {
                         if (raidCount[6] === 0 || !raidCount[6]) {
                             raidCount[6] = 1
@@ -162,17 +183,23 @@ function countMarkers(map) { // eslint-disable-line no-unused-vars
         for (i = 0; i < raidCount.length; i++) {
             if (raidCount[i] > 0) {
                 if (i === 1) {
-                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid', '.png', '1') + '" style="height:48px;"/></td><td style="vertical-align:middle;">1</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '1') + '" style="height:48px;"/></td><td style="vertical-align:middle;">1</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
                 } else if (i === 2) {
-                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid', '.png', '2') + '" style="height:48px;"/></td><td style="vertical-align:middle;">2</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '2') + '" style="height:48px;"/></td><td style="vertical-align:middle;">2</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
                 } else if (i === 3) {
-                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid', '.png', '3') + '" style="height:48px;"/></td><td style="vertical-align:middle;">3</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '3') + '" style="height:48px;"/></td><td style="vertical-align:middle;">3</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
                 } else if (i === 4) {
-                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid', '.png', '4') + '" style="height:48px;"/></td><td style="vertical-align:middle;">4</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '4') + '" style="height:48px;"/></td><td style="vertical-align:middle;">4</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
                 } else if (i === 5) {
-                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid', '.png', '5') + '" style="height:48px;"/></td><td style="vertical-align:middle;">5</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '5') + '" style="height:48px;"/></td><td style="vertical-align:middle;">5</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
                 } else if (i === 6) {
-                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid', '.png', '6') + '" style="height:48px;"/></td><td style="vertical-align:middle;">6</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '6') + '" style="height:48px;"/></td><td style="vertical-align:middle;">6</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                } else if (i === 7) {
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '7') + '" style="height:48px;"/></td><td style="vertical-align:middle;">7</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                } else if (i === 8) {
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '8') + '" style="height:48px;"/></td><td style="vertical-align:middle;">8</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
+                } else if (i === 9) {
+                    raidListString += '<tr><td><img src="' + getIcon(iconpath.raid, 'raid/egg', '.png', '9') + '" style="height:48px;"/></td><td style="vertical-align:middle;">9</td><td style="vertical-align:middle;">' + raidCount[i] + '</td><td style="vertical-align:middle;">' + Math.round(raidCount[i] * 100 / raidTotal * 10) / 10 + '%</td></tr>'
                 }
             }
         }
@@ -280,7 +307,7 @@ function countMarkers(map) { // eslint-disable-line no-unused-vars
             var thisSpawnpointLocation = {lat: mapData.spawnpoints[key]['latitude'], lng: mapData.spawnpoints[key]['longitude']}
             thisSpawnpointIsVisible = currentVisibleMap.contains(thisSpawnpointLocation)
             if (thisSpawnpointIsVisible) {
-                if (mapData.spawnpoints[key]['time'] === 0) {
+                if (mapData.spawnpoints[key]['time'] === null) {
                     if (spawnpointCount[2] === 0 || !spawnpointCount[2]) {
                         spawnpointCount[2] = 1
                     } else {
@@ -374,23 +401,33 @@ function processRewardStats(i, item) { // eslint-disable-line no-unused-vars
     var hiddenName = '<span style="display: none;">' + item['name'] + '</span>'
 
     switch (item['quest_reward_type']) {
+        case 1:
+            reward = '<img src="' + getIcon(iconpath.reward, 'reward/experience', '.png', item['quest_reward_amount']) + '" style="width:40px;">' +
+            hiddenName
+            type = i8ln('XP')
+            break
         case 2:
             reward = '<img src="' + getIcon(iconpath.reward, 'reward/item', '.png', item['quest_item_id'], item['quest_reward_amount']) + '" style="width:40px;">' +
             hiddenName
             type = i8ln('Item')
             break
         case 3:
-            reward = '<img src="' + getIcon(iconpath.reward, 'reward/stardust', '.png', item['quest_dust_amount']) + '" style="width:40px;">' +
+            reward = '<img src="' + getIcon(iconpath.reward, 'reward/stardust', '.png', item['quest_reward_amount']) + '" style="width:40px;">' +
             hiddenName
             type = i8ln('Stardust')
             break
+        case 4:
+            reward = '<img src="' + getIcon(iconpath.reward, 'reward/candy', '.png', item['quest_pokemon_id']) + '" style="width:40px;">' +
+            hiddenName
+            type = i8ln('Candy')
+            break
         case 7:
-            reward = '<img src="' + getIcon(iconpath.pokemon, 'pokemon', '.png', item['quest_pokemon_id'], 0, item['quest_pokemon_form']) + '" style="width:40px;">' +
+            reward = '<img src="' + getIcon(iconpath.pokemon, 'pokemon', '.png', item['quest_pokemon_id'], 0, item['quest_pokemon_form'], item['quest_pokemon_costume']) + '" style="width:40px;">' +
             hiddenName
             type = i8ln('Pokémon')
             break
         case 12:
-            reward = '<img src="' + getIcon(iconpath.reward, 'reward/mega_resource', '.png', item['quest_energy_pokemon_id']) + '" style="width:40px;">' +
+            reward = '<img src="' + getIcon(iconpath.reward, 'reward/mega_resource', '.png', item['quest_pokemon_id'], item['quest_reward_amount']) + '" style="width:40px;">' +
             hiddenName
             type = i8ln('Mega Energy')
             break

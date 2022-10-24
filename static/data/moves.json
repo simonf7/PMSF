@@ -2072,7 +2072,7 @@
     "dps": 0
   },
   "321": {
-    "name": "Giga impact",
+    "name": "Giga Impact",
     "type": "Normal",
     "damage": 0,
     "duration": 0,
@@ -2104,7 +2104,7 @@
     "dps": 0
   },
   "325": {
-    "name": "Lock-on",
+    "name": "Lock-On",
     "type": "Normal",
     "damage": 0,
     "duration": 0,
@@ -2240,7 +2240,7 @@
     "dps": 0
   },
   "342": {
-    "name": "V-create",
+    "name": "V-Create",
     "type": "Fire",
     "damage": 0,
     "duration": 0,
@@ -2322,6 +2322,214 @@
   "352": {
     "name": "Weather Ball Normal",
     "type": "Normal",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "353": {
+    "name": "Psychic Fangs",
+    "type": "Psychic",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "354": {
+    "name": "Hyperspace Fury",
+    "type": "Dark",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "355": {
+    "name": "Hyperspace Hole",
+    "type": "Psychic",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "356": {
+    "name": "Double Kick",
+    "type": "Fighting",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "357": {
+    "name": "Magical Leaf",
+    "type": "Grass",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "358": {
+    "name": "Sacred Fire",
+    "type": "Fire",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "359": {
+    "name": "Icicle Spear",
+    "type": "Ice",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "360": {
+    "name": "Aeroblast Plus",
+    "type": "Flying",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "361": {
+    "name": "Aeroblast Plus Plus",
+    "type": "Flying",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "362": {
+    "name": "Sacred Fire Plus",
+    "type": "Fire",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "363": {
+    "name": "Sacred Fire Plus Plus",
+    "type": "Fire",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "364": {
+    "name": "Acrobatics",
+    "type": "Flying",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "365": {
+    "name": "Luster Purge",
+    "type": "Psychic",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "366": {
+    "name": "Mist Ball",
+    "type": "Psychic",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "367": {
+    "name": "Brutal Swing",
+    "type": "Dark",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "368": {
+    "name": "Rollout",
+    "type": "Rock",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "369": {
+    "name": "Seed Flare",
+    "type": "Grass",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "370": {
+    "name": "Obstruct",
+    "type": "Dark",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "371": {
+    "name": "Shadow Force",
+    "type": "Ghost",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "372": {
+    "name": "Meteor Beam",
+    "type": "Rock",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "373": {
+    "name": "Water Shuriken",
+    "type": "Water",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "374": {
+    "name": "Fusion Bolt",
+    "type": "Electric",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "375": {
+    "name": "Fusion Flare",
+    "type": "Fire",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "376": {
+    "name": "Poltergeist",
+    "type": "Ghost",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "377": {
+    "name": "High Horsepower",
+    "type": "Ground",
+    "damage": 0,
+    "duration": 0,
+    "energy": 0,
+    "dps": 0
+  },
+  "378": {
+    "name": "Glaciate",
+    "type": "Ice",
     "damage": 0,
     "duration": 0,
     "energy": 0,

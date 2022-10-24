@@ -46,10 +46,9 @@
     "encounters": {
       "first": [
         "13",
-        "49"
+        "213"
       ],
       "second": [
-        "14",
         "15",
         "451"
       ],
@@ -74,17 +73,17 @@
     "second_reward": "true",
     "encounters": {
       "first": [
-        "228",
-        "261"
+        "19",
+        "509"
       ],
       "second": [
-        "274",
-        "302",
-        "332"
+        "20",
+        "434"
       ],
       "third": [
-        "275",
-        "319"
+        "20",
+        "332",
+        "430"
       ]
     }
   },
@@ -98,10 +97,11 @@
     "second_reward": "false",
     "encounters": {
       "first": [
+        "103",
         "147"
       ],
       "second": [
-        "148",
+        "103",
         "330"
       ],
       "third": [
@@ -126,6 +126,7 @@
       ],
       "second": [
         "209",
+        "210",
         "281"
       ],
       "third": [
@@ -144,17 +145,17 @@
     "second_reward": "false",
     "encounters": {
       "first": [
-        "106",
-        "107"
-      ],
-      "second": [
         "66",
         "296"
       ],
-      "third": [
+      "second": [
         "106",
-        "107",
-        "297"
+        "107"
+      ],
+      "third": [
+        "67",
+        "106",
+        "107"
       ]
     }
   },
@@ -168,16 +169,17 @@
     "second_reward": "true",
     "encounters": {
       "first": [
-        "4",
-        "37"
+        "155",
+        "322"
       ],
       "second": [
-        "5",
-        "126"
+        "126",
+        "156"
       ],
       "third": [
         "38",
-        "59"
+        "157",
+        "323"
       ]
     }
   },
@@ -191,17 +193,18 @@
     "second_reward": "false",
     "encounters": {
       "first": [
-        "41",
         "198",
-        "396"
+        "396",
+        "580"
       ],
       "second": [
         "42",
         "397"
       ],
       "third": [
-        "169",
-        "398"
+        "130",
+        "149",
+        "169"
       ]
     }
   },
@@ -219,16 +222,16 @@
     "second_reward": "true",
     "encounters": {
       "first": [
-        "331",
-        "387"
+        "152",
+        "331"
       ],
       "second": [
-        "2",
-        "114"
+        "332"
       ],
       "third": [
-        "45",
-        "182"
+        "154",
+        "332",
+        "591"
       ]
     }
   },
@@ -239,37 +242,38 @@
   "25": {
     "type": "Ground",
     "grunt": "Male",
-    "second_reward": "false",
+    "second_reward": "true",
     "encounters": {
       "first": [
-        "27",
-        "104"
+        "74",
+        "449"
       ],
       "second": [
-        "28",
-        "51"
+        "75",
+        "449"
       ],
       "third": [
-        "105",
-        "330",
-        "472"
+        "76",
+        "323",
+        "450"
       ]
     }
   },
   "26": {
     "type": "Ice",
     "grunt": "Female",
-    "second_reward": "true",
+    "second_reward": "false",
     "encounters": {
       "first": [
-        "220",
-        "363"
+        "27",
+        "220"
       ],
       "second": [
-        "91",
+        "28",
         "459"
       ],
       "third": [
+        "91",
         "131",
         "460"
       ]
@@ -280,11 +284,11 @@
     "grunt": "Male"
   },
   "28": {
-    "type": "Metal",
+    "type": "Steel",
     "grunt": "Female"
   },
   "29": {
-    "type": "Metal",
+    "type": "Steel",
     "grunt": "Male"
   },
   "30": {
@@ -298,12 +302,13 @@
     "encounters": {
       "first": [
         "19",
-        "216",
-        "399"
+        "293",
+        "504"
       ],
       "second": [
         "20",
-        "400"
+        "294",
+        "399"
       ],
       "third": [
         "20",
@@ -318,13 +323,13 @@
     "second_reward": "true",
     "encounters": {
       "first": [
-        "30",
         "32",
-        "41"
+        "41",
+        "590"
       ],
       "second": [
-        "33",
-        "110"
+        "30",
+        "33"
       ],
       "third": [
         "89",
@@ -347,10 +352,11 @@
     "encounters": {
       "first": [
         "63",
-        "280"
+        "203"
       ],
       "second": [
-        "375"
+        "203",
+        "280"
       ],
       "third": [
         "65",
@@ -369,13 +375,16 @@
     "second_reward": "true",
     "encounters": {
       "first": [
+        "185",
         "246"
       ],
       "second": [
+        "75",
         "345",
         "347"
       ],
       "third": [
+        "76",
         "247",
         "248"
       ]
@@ -387,16 +396,16 @@
     "second_reward": "true",
     "encounters": {
       "first": [
-        "54",
+        "158",
         "258"
       ],
       "second": [
-        "8",
-        "90"
+        "159",
+        "259"
       ],
       "third": [
-        "80",
-        "199"
+        "160",
+        "260"
       ]
     }
   },
@@ -427,17 +436,17 @@
     "second_reward": "false",
     "encounters": {
       "first": [
-        "88"
+        "1"
       ],
       "second": [
         "3",
-        "68",
+        "139",
         "169"
       ],
       "third": [
-        "6",
-        "59",
-        "248"
+        "248",
+        "260",
+        "389"
       ]
     }
   },
@@ -447,15 +456,15 @@
     "second_reward": "false",
     "encounters": {
       "first": [
-        "207"
+        "4"
       ],
       "second": [
-        "131",
+        "6",
         "303",
-        "346"
+        "373"
       ],
       "third": [
-        "143",
+        "208",
         "212",
         "282"
       ]
@@ -467,17 +476,17 @@
     "second_reward": "false",
     "encounters": {
       "first": [
-        "29"
+        "7"
       ],
       "second": [
-        "15",
-        "45",
-        "80"
+        "9",
+        "131",
+        "257"
       ],
       "third": [
         "31",
-        "105",
-        "229"
+        "229",
+        "452"
       ]
     }
   },
@@ -487,7 +496,7 @@
     "second_reward": "false",
     "encounters": {
       "first": [
-        "249"
+        "381"
       ],
       "second": [],
       "third": []
@@ -526,15 +535,17 @@
     "encounters": {
       "first": [
         "200",
-        "302"
+        "302",
+        "355"
       ],
       "second": [
-        "302",
-        "353"
+        "354",
+        "356"
       ],
       "third": [
         "302",
-        "354"
+        "354",
+        "477"
       ]
     }
   },
@@ -544,21 +555,30 @@
     "second_reward": "true",
     "encounters": {
       "first": [
-        "81",
-        "309"
+        "179",
+        "403"
       ],
       "second": [
-        "82",
+        "100",
         "125"
       ],
       "third": [
-        "82",
-        "181"
+        "125",
+        "181",
+        "405"
       ]
     }
   },
   "50": {
     "type": "Electric",
+    "grunt": "Male"
+  },
+  "51": {
+    "type": "Balloon Grunt",
+    "grunt": "Female"
+  },
+  "52": {
+    "type": "Balloon Grunt",
     "grunt": "Male"
   },
   "53": {
@@ -567,6 +587,150 @@
   },
   "54": {
     "type": "Gruntb",
+    "grunt": "Male"
+  },
+  "55": {
+    "type": "Bug Balloon",
+    "grunt": "Female"
+  },
+  "56": {
+    "type": "Bug Balloon",
+    "grunt": "Male"
+  },
+  "57": {
+    "type": "Dark Balloon",
+    "grunt": "Female"
+  },
+  "58": {
+    "type": "Dark Balloon",
+    "grunt": "Male"
+  },
+  "59": {
+    "type": "Dragon Balloon",
+    "grunt": "Female"
+  },
+  "60": {
+    "type": "Dragon Balloon",
+    "grunt": "Male"
+  },
+  "61": {
+    "type": "Fairy Balloon",
+    "grunt": "Female"
+  },
+  "62": {
+    "type": "Fairy Balloon",
+    "grunt": "Male"
+  },
+  "63": {
+    "type": "Fighting Balloon",
+    "grunt": "Female"
+  },
+  "64": {
+    "type": "Fighting Balloon",
+    "grunt": "Male"
+  },
+  "65": {
+    "type": "Fire Balloon",
+    "grunt": "Female"
+  },
+  "66": {
+    "type": "Fire Balloon",
+    "grunt": "Male"
+  },
+  "67": {
+    "type": "Flying Balloon",
+    "grunt": "Female"
+  },
+  "68": {
+    "type": "Flying Balloon",
+    "grunt": "Male"
+  },
+  "69": {
+    "type": "Grass Balloon",
+    "grunt": "Female"
+  },
+  "70": {
+    "type": "Grass Balloon",
+    "grunt": "Male"
+  },
+  "71": {
+    "type": "Ground Balloon",
+    "grunt": "Female"
+  },
+  "72": {
+    "type": "Ground Balloon",
+    "grunt": "Male"
+  },
+  "73": {
+    "type": "Ice Balloon",
+    "grunt": "Female"
+  },
+  "74": {
+    "type": "Ice Balloon",
+    "grunt": "Male"
+  },
+  "75": {
+    "type": "Steel Balloon",
+    "grunt": "Female"
+  },
+  "76": {
+    "type": "Steel Balloon",
+    "grunt": "Male"
+  },
+  "77": {
+    "type": "Normal Balloon",
+    "grunt": "Female"
+  },
+  "78": {
+    "type": "Normal Balloon",
+    "grunt": "Male"
+  },
+  "79": {
+    "type": "Poison Balloon",
+    "grunt": "Female"
+  },
+  "80": {
+    "type": "Poison Balloon",
+    "grunt": "Male"
+  },
+  "81": {
+    "type": "Psychic Balloon",
+    "grunt": "Female"
+  },
+  "82": {
+    "type": "Psychic Balloon",
+    "grunt": "Male"
+  },
+  "83": {
+    "type": "Rock Balloon",
+    "grunt": "Female"
+  },
+  "84": {
+    "type": "Rock Balloon",
+    "grunt": "Male"
+  },
+  "85": {
+    "type": "Water Balloon",
+    "grunt": "Female"
+  },
+  "86": {
+    "type": "Water Balloon",
+    "grunt": "Male"
+  },
+  "87": {
+    "type": "Ghost Balloon",
+    "grunt": "Female"
+  },
+  "88": {
+    "type": "Ghost Balloon",
+    "grunt": "Male"
+  },
+  "89": {
+    "type": "Electric Balloon",
+    "grunt": "Female"
+  },
+  "90": {
+    "type": "Electric Balloon",
     "grunt": "Male"
   },
   "500": {
@@ -611,6 +775,58 @@
   },
   "510": {
     "type": "Event NPC 10",
+    "grunt": ""
+  },
+  "511": {
+    "type": "Event Blanche",
+    "grunt": "Female"
+  },
+  "512": {
+    "type": "Event Candela",
+    "grunt": "Female"
+  },
+  "513": {
+    "type": "Event Spark",
+    "grunt": "Male"
+  },
+  "514": {
+    "type": "Event NPC 11",
+    "grunt": ""
+  },
+  "515": {
+    "type": "Event NPC 12",
+    "grunt": ""
+  },
+  "516": {
+    "type": "Event NPC 13",
+    "grunt": ""
+  },
+  "517": {
+    "type": "Event NPC 14",
+    "grunt": ""
+  },
+  "518": {
+    "type": "Event NPC 15",
+    "grunt": ""
+  },
+  "519": {
+    "type": "Event NPC 16",
+    "grunt": ""
+  },
+  "520": {
+    "type": "Event NPC 17",
+    "grunt": ""
+  },
+  "521": {
+    "type": "Event NPC 18",
+    "grunt": ""
+  },
+  "522": {
+    "type": "Event NPC 19",
+    "grunt": ""
+  },
+  "523": {
+    "type": "Event NPC 20",
     "grunt": ""
   }
 }

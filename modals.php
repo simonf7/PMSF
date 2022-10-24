@@ -306,7 +306,7 @@
                         <?php if (! $noManualPokemon && !$noPokemon) { ?>
                             <div class="tab-pane fade<?php echo (($firstTabContent == 1) ? " show active" : ""); ?>" id="nav-pokemon" role="tabpanel" aria-labelledby="nav-pokemon-tab">
                                 <input type="hidden" name="pokemonID" class="pokemonID"/>
-                                <?php pokemonFilterImages($noPokemonNumbers, 'pokemonSubmitFilter(event)', $pokemonToExclude, 6); ?>
+                                <?php pokemonFilterImages($noPokemonNames, $noPokemonNumbers, 'pokemonSubmitFilter(event)', $pokemonToExclude, 6); ?>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" onclick="manualPokemonData(event);">
                                         <i class="fas fa-binoculars"></i> <?php echo i8ln('Submit Pokémon'); ?>
@@ -347,7 +347,7 @@
                         if (! $noAddNewNests && !$noNests) { ?>
                             <div class="tab-pane fade<?php echo (($firstTabContent == 1) ? " show active" : ""); ?>" id="nav-nest" role="tabpanel" aria-labelledby="nav-nest-tab">
                                 <input type="hidden" name="pokemonID" class="pokemonID"/>
-                                <?php pokemonFilterImages($noPokemonNumbers, 'pokemonSubmitFilter(event)', $excludeNestMons, 7); ?>
+                                <?php pokemonFilterImages($noPokemonNames, $noPokemonNumbers, 'pokemonSubmitFilter(event)', $excludeNestMons, 7); ?>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" onclick="submitNewNest(event);"><i
                                             class="fas fa-binoculars"></i> <?php echo i8ln('Submit Nest'); ?>
@@ -506,7 +506,7 @@
                 <div class="modal-body">
                     <input type="hidden" id="editnestid" name="editnestid" value=""/>
                     <input type="hidden" name="pokemonID" class="pokemonID"/>
-                    <?php pokemonFilterImages($noPokemonNumbers, 'pokemonSubmitFilter(event)', $excludeNestMons, 5); ?>
+                    <?php pokemonFilterImages($noPokemonNames, $noPokemonNumbers, 'pokemonSubmitFilter(event)', $excludeNestMons, 5); ?>
                 </div>
                 <div class="modal-footer">
                     <button type="button" onclick="manualNestData(event);" class="btn btn-primary">
@@ -728,6 +728,9 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
                                 </select>
                             </div>
                             <div class="collapse" id="throwTypeList">
@@ -812,6 +815,12 @@
                                     <option value="2000">2000</option>
                                 </select>
                             </div>
+                            <div class="collapse" id="xpAmountList">
+                                <select id="xpAmount" name="xpAmount" class="form-select" aria-label="XP amount">
+                                    <option selected><?php echo i8ln('Select XP amount'); ?></option>
+                                    <option value="700">700</option>
+                                </select>
+                            </div>
                         </label>
                         <button type="button" class="btn btn-primary btn-sm" onclick="manualQuestData(event);" class="submitting-quest"><i class="fas fa-binoculars"></i> <?php echo i8ln('Submit Quest'); ?></button>
                     </div>
@@ -835,12 +844,15 @@
                         <div class="switch-container">
                             <div class="pokemon-list raid-submission">
                                 <input type="hidden" id="manualraidpokemonid" name="manualraidpokemonid" value="">
-                                <span class="pokemon-icon-sprite" data-value="egg_1" data-label="Level 1" onclick="pokemonRaidFilter(event);"><span class="egg_1 inner-bg" style="background: url('static/sprites/raid/1.png');background-size:100%"></span><span class="egg-number">1</span></span>
-                                <!-- Not in game <span class="pokemon-icon-sprite" data-value="egg_2" data-label="Level 2" onclick="pokemonRaidFilter(event);"><span class="egg_2 inner-bg" style="background: url('static/sprites/raid/2.png');background-size:100%"></span><span class="egg-number">2</span></span> -->
-                                <span class="pokemon-icon-sprite" data-value="egg_3" data-label="Level 3" onclick="pokemonRaidFilter(event);"><span class="egg_3 inner-bg" style="background: url('static/sprites/raid/3.png');background-size:100%"></span><span class="egg-number">3</span></span>
-                                <!-- Not in game <span class="pokemon-icon-sprite" data-value="egg_4" data-label="Level 4" onclick="pokemonRaidFilter(event);"><span class="egg_4 inner-bg" style="background: url('static/sprites/raid/4.png');background-size:100%"></span><span class="egg-number">4</span></span> -->
-                                <span class="pokemon-icon-sprite" data-value="egg_5" data-label="Level 5" onclick="pokemonRaidFilter(event);"><span class="egg_5 inner-bg" style="background: url('static/sprites/raid/5.png');background-size:100%"></span><span class="egg-number">5</span></span>
-                                <span class="pokemon-icon-sprite" data-value="egg_6" data-label="Level 6" onclick="pokemonRaidFilter(event);"><span class="egg_6 inner-bg" style="background: url('static/sprites/raid/6.png');background-size:100%"></span><span class="egg-number">6</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_1" data-label="Level 1" onclick="pokemonRaidFilter(event);"><span class="egg_1 inner-bg" style="background: url('static/sprites/raid/egg/1.png');background-size:100%"></span><span class="egg-number">1</span></span>
+                                <!-- Not in game <span class="pokemon-icon-sprite" data-value="egg_2" data-label="Level 2" onclick="pokemonRaidFilter(event);"><span class="egg_2 inner-bg" style="background: url('static/sprites/raid/egg/2.png');background-size:100%"></span><span class="egg-number">2</span></span> -->
+                                <span class="pokemon-icon-sprite" data-value="egg_3" data-label="Level 3" onclick="pokemonRaidFilter(event);"><span class="egg_3 inner-bg" style="background: url('static/sprites/raid/egg/3.png');background-size:100%"></span><span class="egg-number">3</span></span>
+                                <!-- Not in game <span class="pokemon-icon-sprite" data-value="egg_4" data-label="Level 4" onclick="pokemonRaidFilter(event);"><span class="egg_4 inner-bg" style="background: url('static/sprites/raid/egg/4.png');background-size:100%"></span><span class="egg-number">4</span></span> -->
+                                <span class="pokemon-icon-sprite" data-value="egg_5" data-label="Level 5" onclick="pokemonRaidFilter(event);"><span class="egg_5 inner-bg" style="background: url('static/sprites/raid/egg/5.png');background-size:100%"></span><span class="egg-number">5</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_6" data-label="Level 6" onclick="pokemonRaidFilter(event);"><span class="egg_6 inner-bg" style="background: url('static/sprites/raid/egg/6.png');background-size:100%"></span><span class="egg-number">6</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_7" data-label="Level 7" onclick="pokemonRaidFilter(event);"><span class="egg_7 inner-bg" style="background: url('static/sprites/raid/egg/7.png');background-size:100%"></span><span class="egg-number">7</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_8" data-label="Level 8" onclick="pokemonRaidFilter(event);"><span class="egg_8 inner-bg" style="background: url('static/sprites/raid/egg/8.png');background-size:100%"></span><span class="egg-number">8</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_9" data-label="Level 9" onclick="pokemonRaidFilter(event);"><span class="egg_9 inner-bg" style="background: url('static/sprites/raid/egg/9.png');background-size:100%"></span><span class="egg-number">9</span></span>
                                 <?php
                                 $pokemonJson = file_get_contents('static/dist/data/pokemon.min.json');
                                 $pokemon = json_decode($pokemonJson, true);
