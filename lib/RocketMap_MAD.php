@@ -59,19 +59,19 @@ class RocketMap_MAD extends RocketMap
         }
         if (!empty($despawnTimeType)) {
             if ($despawnTimeType == 1) {
-               $conds[] = 'ts.calc_endminsec IS NOT NULL';
+                $conds[] = 'ts.calc_endminsec IS NOT NULL';
             } elseif ($despawnTimeType == 2) {
-               $conds[] = '(ts.calc_endminsec IS NULL AND spawnpoint_id IS NOT NULL)';
+                $conds[] = '(ts.calc_endminsec IS NULL AND spawnpoint_id IS NOT NULL)';
             } elseif ($despawnTimeType == 3) {
-               $conds[] = 'ts.calc_endminsec IS NULL';
+                $conds[] = 'ts.calc_endminsec IS NULL';
             }
         }
         if (!empty($gender) && ($gender == 1 || $gender == 2)) {
-           $conds[] = 'gender = ' . $gender;
+            $conds[] = 'gender = ' . $gender;
         }
         if ($missingIvOnly) {
             $conds[] = '(individual_attack IS NULL OR individual_defense IS NULL OR individual_stamina IS NULL)';
-        } else  {
+        } else {
             $zeroIvSql = ($zeroIv) ? ' OR (individual_attack = 0 AND individual_defense = 0 AND individual_stamina = 0)' : '';
             $hundoIvSql = ($hundoIv) ? ' OR (individual_attack = 15 AND individual_defense = 15 AND individual_stamina = 15)' : '';
             $exMinIvSql = (!empty($exMinIv)) ? ' OR pokemon_id IN(' . $exMinIv . ')' : '';
@@ -137,15 +137,15 @@ class RocketMap_MAD extends RocketMap
         }
         if (!empty($despawnTimeType)) {
             if ($despawnTimeType == 1) {
-               $conds[] = 'ts.calc_endminsec IS NOT NULL';
+                $conds[] = 'ts.calc_endminsec IS NOT NULL';
             } elseif ($despawnTimeType == 2) {
-               $conds[] = '(ts.calc_endminsec IS NULL AND spawnpoint_id IS NOT NULL)';
+                $conds[] = '(ts.calc_endminsec IS NULL AND spawnpoint_id IS NOT NULL)';
             } elseif ($despawnTimeType == 3) {
-               $conds[] = 'ts.calc_endminsec IS NULL';
+                $conds[] = 'ts.calc_endminsec IS NULL';
             }
         }
         if (!empty($gender) && ($gender == 1 || $gender == 2)) {
-           $conds[] = 'gender = ' . $gender;
+            $conds[] = 'gender = ' . $gender;
         }
         if ($missingIvOnly) {
             $conds[] = '(individual_attack IS NULL OR individual_defense IS NULL OR individual_stamina IS NULL)';
@@ -761,8 +761,7 @@ class RocketMap_MAD extends RocketMap
 
     public function query_stops($conds, $params, $quests_with_ar)
     {
-        global $db, $noQuests, $noQuestsPokemon, $noQuestsItems, $noQuestsEnergy, $noQuestsCandy, $noQuestsStardust, $noQuestsXP;
-        global $db, $noQuests, $noTeamRocket;
+        global $db, $noQuests, $noTeamRocket, $noQuestsPokemon, $noQuestsItems, $noQuestsEnergy, $noQuestsCandy, $noQuestsStardust, $noQuestsXP;
 
         $query = "SELECT Unix_timestamp(Convert_tz(lure_expiration, '+00:00', @@global.time_zone)) AS lure_expiration,
         Unix_timestamp(Convert_tz(incident_expiration, '+00:00', @@global.time_zone)) AS incident_expiration,
@@ -913,7 +912,8 @@ class RocketMap_MAD extends RocketMap
                 $data[] = $pokestop['reward_pokemon_id'];
             }
         } elseif ($type === 'candylist') {
-            $pokestops = $db->query("
+            $pokestops = $db->query(
+                "
                 SELECT distinct
                     quest_pokemon_id AS reward_pokemon_id
                 FROM trs_quest
