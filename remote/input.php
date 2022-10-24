@@ -11,12 +11,17 @@ if (!isset($_POST['secret']) || $_POST['secret'] !== 'hoOUkjsb*(5bKJGFKA385fg42'
 
 if (isset($_FILES['sql']) && $_FILES['sql']['error'] == 0) {
     /**
+     * Grab the config
+     */
+    include('config.php');
+
+    /**
      * Connect to database
      */
     $pdo = new \PDO(
-        'mysql:host=10.169.0.247;port=3306;dbname=pogonorw_map;charset=utf8',
-        'pogonorw_map',
-        'dammit',
+        'mysql:host='.$dbHost.';port=3306;dbname='.$dbName.';charset=utf8',
+        $dbUser,
+        $dbPass,
         []
     );
 
@@ -37,7 +42,6 @@ if (isset($_FILES['sql']) && $_FILES['sql']['error'] == 0) {
 function importSqlFile($pdo, $sqlFile, $tablePrefix = null, $InFilePath = null)
 {
     try {
-        
         // Enable LOAD LOCAL INFILE
         $pdo->setAttribute(\PDO::MYSQL_ATTR_LOCAL_INFILE, true);
         

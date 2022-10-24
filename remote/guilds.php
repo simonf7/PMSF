@@ -10,12 +10,17 @@ if (!isset($_GET['secret']) || $_GET['secret'] !== 'hoOUkjsb*(5bKJGFKA385fg42') 
 }
 
 /**
+ * Grab the config
+ */
+include('config.php');
+
+/**
  * Connect to database
  */
 $pdo = new \PDO(
-    'mysql:host=10.169.0.247;port=3306;dbname=pogonorw_map;charset=utf8',
-    'pogonorw_map',
-    'dammit',
+    'mysql:host='.$dbHost.';port=3306;dbname='.$dbName.';charset=utf8',
+    $dbUser,
+    $dbPass,
     []
 );
 
@@ -61,7 +66,7 @@ if (!$users) {
         </tr>
         <?php
     }
-    ?>
+?>
     </table>
 </body>
 

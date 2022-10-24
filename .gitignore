@@ -51,3 +51,6 @@ composer.lock
 custom/*
 .cache/*
 static/css/custom.css
+
+#SF modifications
+remote/config.php
