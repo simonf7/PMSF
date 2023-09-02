@@ -139,10 +139,10 @@ $appIconPath = 'static/appicons/';
 $imgurCID = "";
 
 /* Counts */
-$numberOfPokemon = 905;
+$numberOfPokemon = 1008;
 $numberOfItem = 1602;
 $numberOfGrunt = 523;
-$numberOfEgg = 18;
+$numberOfEgg = 30;
 
 /* UserTimezone */
 $userTimezone = date_default_timezone_get();
@@ -179,13 +179,6 @@ $discordUsers = [];
 
 $guildRoles = [];
 
-
-/* Facebook Auth */
-$noFacebookLogin = true;                                            // true/false
-$facebookAppId = '';                                                // Facebook App ID
-$facebookAppSecret = '';                                            // Facebook App Secret
-$facebookAppRedirectUri = '';                                       // Callback url make sure this is the same as set in Facebook app config
-$facebookAccessLevel = '1';                                         // Accesslevel used in access-config.php
 
 /* Groupme Auth */
 $noGroupmeLogin = true;                                             // true/false
@@ -275,10 +268,12 @@ $minLevel = '0';                                                    // "0" for e
 $excludeMinIV = '[131, 143, 147, 148, 149, 248]';                   // [] for empty
 
 $noMissingIVOnly = true;                                            // true/false
-$noBigKarp = false;                                                 // true/false
-$noTinyRat = false;                                                 // true/false
+$noBigKarp = true;                                                  // true/false
+$noTinyRat = true;                                                  // true/false
 $noZeroIvToggle = false;                                            // true/false
 $noHundoIvToggle = false;                                           // true/false
+$noXXSToggle = false;                                               // true/false
+$noXXLToggle = false;                                               // true/false
 $noIndependantPvpAndStatsToggle = false;                            // true/false
 $noDespawnTimeType = true;                                          // true/false
 $showDespawnTimeType = 0;                                           // 0 = All, 1 = Verified, 2 = Unverified, 3 = Unverified + Nearby (Nearby = no spawn point)
@@ -304,7 +299,7 @@ $noActiveRaids = true;                                              // true/fals
 $activeRaids = 'false';                                             // true/false
 $noMinMaxRaidLevel = true;                                          // true/false
 $minRaidLevel = 1;
-$maxRaidLevel = 9;
+$maxRaidLevel = 15;
 $noRaidTimer = false;                                               // true/false
 $enableRaidTimer = 'false';                                         // true/false
 $noRaidbossNames = false;                                           // true/false

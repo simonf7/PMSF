@@ -92,9 +92,6 @@
                     echo "<button class='btn btn-primary' type='button' onclick=\"location.href='./login?action=discord-login';\" value='Login with discord'><i class='fab fa-discord'></i> " . i8ln('Login with Discord') . "</button>";
                     echo "<p>In order to login with Discord we will need to access the list of servers you belong to so that we may check you are a member of the PogoNorwich server and not a member of any related to breaking the terms of Pokemon Go!<p>";
                 }
-                if ($noFacebookLogin === false) {
-                    echo "<button class='btn btn-primary' type='button' onclick=\"location.href='./login?action=facebook-login';\" value='Login with facebook'><i class='fab fa-facebook'></i> " . i8ln('Login with Facebook') . "</button>";
-                }
                 if ($noGroupmeLogin === false) {
                     echo "<button class='btn btn-primary' type='button' onclick=\"location.href='./login?action=groupme-login';\" value='Login with groupme'><i class='fas fa-smile'></i> " . i8ln('Login with Groupme') . "</button>";
                 }
@@ -731,6 +728,12 @@
                                     <option value="7">7</option>
                                     <option value="8">8</option>
                                     <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
                                 </select>
                             </div>
                             <div class="collapse" id="throwTypeList">
@@ -853,6 +856,13 @@
                                 <span class="pokemon-icon-sprite" data-value="egg_7" data-label="Level 7" onclick="pokemonRaidFilter(event);"><span class="egg_7 inner-bg" style="background: url('static/sprites/raid/egg/7.png');background-size:100%"></span><span class="egg-number">7</span></span>
                                 <span class="pokemon-icon-sprite" data-value="egg_8" data-label="Level 8" onclick="pokemonRaidFilter(event);"><span class="egg_8 inner-bg" style="background: url('static/sprites/raid/egg/8.png');background-size:100%"></span><span class="egg-number">8</span></span>
                                 <span class="pokemon-icon-sprite" data-value="egg_9" data-label="Level 9" onclick="pokemonRaidFilter(event);"><span class="egg_9 inner-bg" style="background: url('static/sprites/raid/egg/9.png');background-size:100%"></span><span class="egg-number">9</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_10" data-label="Level 10" onclick="pokemonRaidFilter(event);"><span class="egg_10 inner-bg" style="background: url('static/sprites/raid/egg/10.png');background-size:100%"></span><span class="egg-number">10</span></span>
+
+                                <span class="pokemon-icon-sprite" data-value="egg_11" data-label="Level 11" onclick="pokemonRaidFilter(event);"><span class="egg_11 inner-bg" style="background: url('static/sprites/raid/egg/11.png');background-size:100%"></span><span class="egg-number">11</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_12" data-label="Level 12" onclick="pokemonRaidFilter(event);"><span class="egg_12 inner-bg" style="background: url('static/sprites/raid/egg/12.png');background-size:100%"></span><span class="egg-number">12</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_13" data-label="Level 13" onclick="pokemonRaidFilter(event);"><span class="egg_13 inner-bg" style="background: url('static/sprites/raid/egg/13.png');background-size:100%"></span><span class="egg-number">13</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_14" data-label="Level 14" onclick="pokemonRaidFilter(event);"><span class="egg_14 inner-bg" style="background: url('static/sprites/raid/egg/14.png');background-size:100%"></span><span class="egg-number">14</span></span>
+                                <span class="pokemon-icon-sprite" data-value="egg_15" data-label="Level 15" onclick="pokemonRaidFilter(event);"><span class="egg_15 inner-bg" style="background: url('static/sprites/raid/egg/15.png');background-size:100%"></span><span class="egg-number">15</span></span>
                                 <?php
                                 $pokemonJson = file_get_contents('static/dist/data/pokemon.min.json');
                                 $pokemon = json_decode($pokemonJson, true);
@@ -1167,6 +1177,15 @@
                                                         <img src="static/images/stats/rainy-lure.png" width="64" height="64" />
                                                         <h4 class="rainy-lure-count"><?php echo i8ln('Loading...'); ?> <i class="fas fa-spinner fa-spin"></i></h4>
                                                         <p><?php echo i8ln('Rainy Lure'); ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="list-group">
+                                                    <div class="list-group-item">
+                                                        <img src="static/images/stats/sparkly-lure.png" width="64" height="64" />
+                                                        <h4 class="sparkly-lure-count"><?php echo i8ln('Loading...'); ?> <i class="fas fa-spinner fa-spin"></i></h4>
+                                                        <p><?php echo i8ln('Golden Lure'); ?></p>
                                                     </div>
                                                 </div>
                                             </div>

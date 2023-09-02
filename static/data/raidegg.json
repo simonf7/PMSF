@@ -45,48 +45,108 @@
     "level": "9"
   },
   "10": {
+    "type": "1",
+    "image_name": "primal",
+    "level": "10"
+  },
+  "11": {
+    "type": "1",
+    "image_name": "shadow_normal",
+    "level": "11"
+  },
+  "12": {
+    "type": "1",
+    "image_name": "shadow_normal",
+    "level": "12"
+  },
+  "13": {
+    "type": "1",
+    "image_name": "shadow_rare",
+    "level": "13"
+  },
+  "14": {
+    "type": "1",
+    "image_name": "shadow_rare",
+    "level": "14"
+  },
+  "15": {
+    "type": "1",
+    "image_name": "shadow_legendary",
+    "level": "15"
+  },
+  "16": {
     "type": "2",
     "image_name": "hatched_normal",
     "level": "1"
   },
-  "11": {
+  "17": {
     "type": "2",
     "image_name": "hatched_normal",
     "level": "2"
   },
-  "12": {
+  "18": {
     "type": "2",
     "image_name": "hatched_rare",
     "level": "3"
   },
-  "13": {
+  "19": {
     "type": "2",
     "image_name": "hatched_rare",
     "level": "4"
   },
-  "14": {
+  "20": {
     "type": "2",
     "image_name": "hatched_legendary",
     "level": "5"
   },
-  "15": {
+  "21": {
     "type": "2",
     "image_name": "hatched_mega",
     "level": "6"
   },
-  "16": {
+  "22": {
     "type": "2",
     "image_name": "hatched_mega_legendary",
     "level": "7"
   },
-  "17": {
+  "23": {
     "type": "2",
     "image_name": "hatched_ultra_beast",
     "level": "8"
   },
-  "18": {
+  "24": {
     "type": "2",
     "image_name": "hatched_elite",
     "level": "9"
+  },
+  "25": {
+    "type": "2",
+    "image_name": "hatched_primal",
+    "level": "10"
+  },
+  "26": {
+    "type": "2",
+    "image_name": "hatched_shadow_normal",
+    "level": "11"
+  },
+  "27": {
+    "type": "2",
+    "image_name": "hatched_shadow_normal",
+    "level": "12"
+  },
+  "28": {
+    "type": "2",
+    "image_name": "hatched_shadow_rare",
+    "level": "13"
+  },
+  "29": {
+    "type": "2",
+    "image_name": "hatched_shadow_rare",
+    "level": "14"
+  },
+  "30": {
+    "type": "2",
+    "image_name": "hatched_shadow_legendary",
+    "level": "15"
   }
 }

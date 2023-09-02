@@ -4,7 +4,7 @@ if (! file_exists('config/config.php')) {
     die("<h1>Config file missing</h1><p>Please ensure you have created your config file (<code>config/config.php</code>).</p>");
 }
 include('config/config.php');
-if ($noNativeLogin === false || $noDiscordLogin === false || $noFacebookLogin === false || $noPatreonLogin === false) {
+if ($noNativeLogin === false || $noDiscordLogin === false || $noPatreonLogin === false) {
     if (isset($_COOKIE["LoginCookie"])) {
         if (validateCookie($_COOKIE["LoginCookie"]) === false) {
             header("Location: .");
@@ -301,6 +301,22 @@ if (strtolower($map) === "rdm") {
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" id="no-hundo-iv-switch" type="checkbox" name="no-hundo-iv-switch">
                                                 <label class="form-check-label" for="no-hundo-iv-switch"><?php echo i8ln('Ignore Filters for 100%IV') ?></label>
+                                            </div>
+                                        <?php
+                                        }
+                                        if (! $noHighLevelData && ! $noXXSToggle) { ?>
+                                            <div class="dropdown-divider"></div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" id="no-xxs-switch" type="checkbox" name="no-xxs-switch">
+                                                <label class="form-check-label" for="no-xxs-switch"><?php echo i8ln('Ignore Filters for XXS') ?></label>
+                                            </div>
+                                        <?php
+                                        }
+                                        if (! $noHighLevelData && ! $noXXLToggle) { ?>
+                                            <div class="dropdown-divider"></div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" id="no-xxl-switch" type="checkbox" name="no-xxl-switch">
+                                                <label class="form-check-label" for="no-xxl-switch"><?php echo i8ln('Ignore Filters for XXL') ?></label>
                                             </div>
                                         <?php
                                         }
@@ -870,6 +886,12 @@ if (strtolower($map) === "rdm") {
                                                     <option value="7">7</option>
                                                     <option value="8">8</option>
                                                     <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
                                                 </select>
                                                 <label for="min-level-raids-filter-switch"><?php echo i8ln('Minimum Raid Level') ?></label>
                                             </div>
@@ -885,6 +907,12 @@ if (strtolower($map) === "rdm") {
                                                     <option value="7">7</option>
                                                     <option value="8">8</option>
                                                     <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
                                                 </select>
                                                 <label for="max-level-raids-filter-switch"><?php echo i8ln('Maximum Raid Level') ?></label>
                                             </div>
@@ -916,7 +944,7 @@ if (strtolower($map) === "rdm") {
                                                     </div>
                                                     <div class="tab-pane fade" id="exclude-raidegg" role="tabpanel" aria-labelledby="exclude-raidegg-tab">
                                                         <div class="scroll-container">
-                                                            <?php raideggFilterImages($noRaideggNumbers, '', $excludeRaidegg, 18); ?>
+                                                            <?php raideggFilterImages($noRaideggNumbers, '', $excludeRaidegg, 30); ?>
                                                         </div>
                                                         <div class="dropdown-divider"></div>
                                                         <a class="btn btn-secondary select-all-egg" href="#"><?php echo i8ln('All') ?></a>
@@ -1234,6 +1262,12 @@ if (strtolower($map) === "rdm") {
                                                 <option value="7">7</option>
                                                 <option value="8">8</option>
                                                 <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
                                             </select>
                                             <label for="notify-raid"><?php echo i8ln('Notify of Minimum Raid Level') ?></label>
                                         </div>
@@ -1670,6 +1704,8 @@ include('modals.php');
     var showTinyRat = <?php echo (!$noHighLevelData && !$noTinyRat) ? 'true' : 'false' ?>;
     var showZeroIv = <?php echo (!$noHighLevelData && !$noZeroIvToggle) ? 'true' : 'false' ?>;
     var showHundoIv = <?php echo (!$noHighLevelData && !$noHundoIvToggle) ? 'true' : 'false' ?>;
+    var showXXS = <?php echo (!$noHighLevelData && !$noXXSToggle) ? 'true' : 'false' ?>;
+    var showXXL = <?php echo (!$noHighLevelData && !$noXXLToggle) ? 'true' : 'false' ?>;
     var showMissingIVOnly = <?php echo (!$noHighLevelData && !$noMissingIVOnly ) ? 'true' : 'false' ?>;
     var showIndependantPvpAndStats = <?php echo (!$noHighLevelData && !$noPvp && !$noIndependantPvpAndStatsToggle) ? 'true' : 'false' ?>;
     var showDespawnTimeType = <?php echo $noDespawnTimeType ? 0 : $showDespawnTimeType ?>;
@@ -1760,6 +1796,8 @@ include('modals.php');
     if (String(showTinyRat) !== String(localStorage.getItem('showTinyRat'))) { localStorage.setItem('showTinyRat', false) }
     if (String(showZeroIv) !== String(localStorage.getItem('showZeroIv'))) { localStorage.setItem('showZeroIv', false) }
     if (String(showHundoIv) !== String(localStorage.getItem('showHundoIv'))) { localStorage.setItem('showHundoIv', false) }
+    if (String(showXXS) !== String(localStorage.getItem('showXXS'))) { localStorage.setItem('showXXS', false) }
+    if (String(showXXL) !== String(localStorage.getItem('showXXL'))) { localStorage.setItem('showXXL', false) }
     if (String(showMissingIVOnly) !== String(localStorage.getItem('showMissingIVOnly'))) { localStorage.setItem('showMissingIVOnly', false) }
     if (String(showIndependantPvpAndStats) !== String(localStorage.getItem('showIndependantPvpAndStats'))) { localStorage.setItem('showIndependantPvpAndStats', false) }
 
